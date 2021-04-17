@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es6",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "es6",
+      "scripthost",
+      "webworker",
+      "es5",
+      "es7",
+      "es2017"
+    ],
+    "types": [
+      "node",
+      "jest"
+    ],
+    "jsx": "react-jsx",
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "allowJs": true,
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "exclude": [
+    "node_modules",
+    "public",
+    "jest.config.js",
+    "webpack"
+  ],
+  "include": [
+    "src"
+  ]
+}
