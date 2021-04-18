@@ -1,0 +1,16 @@
+.Mycard {
+  height: 22rem;
+  width: 21rem;
+  
+}
+
+.Image {
+    height: 40%;
+    object-fit: contain;
+  }
+
+.Title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
