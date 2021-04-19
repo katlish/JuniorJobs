@@ -14,6 +14,11 @@ export interface IJobProps {
   job: Job;
 }
 
+export interface IMapProps {
+  address: string;
+}
+
+
 export interface UserState {
   isLoading: boolean;
   error: any;
@@ -25,6 +30,9 @@ export interface JobsState {
   isLoading: boolean;
   error: any;
   data: Job[];
+  query: string;
+  isRemote: boolean;
+  country: string;
 }
 
 export interface Job {

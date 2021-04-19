@@ -22,3 +22,12 @@ export const fetchJobs = (): ThunkAction<
     throw e;
   }
 };
+
+export const toggleIsRemote = () => ({
+	type: actions.JOBS_IS_REMOTE_TOGGLE
+});
+
+export const setQuery = (query: string) => ({
+	type: actions.JOBS_SET_QUERY,
+  query
+});
