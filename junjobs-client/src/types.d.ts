@@ -18,6 +18,13 @@ export interface IMapProps {
   address: string;
 }
 
+export interface IPaginationProps {
+  totalItems: number;
+  itemsPerPage: number;
+  paginate: (number: number) => void;
+  currentPage: number;
+  pagesPerBlock: number;
+}
 
 export interface UserState {
   isLoading: boolean;
