@@ -2,7 +2,7 @@ import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import * as actions from "../constants/constants";
 import { API_JOBS } from "../../API";
-import { JobsState } from "../../types";
+import { JobsState, Country } from "../../types";
 
 export const fetchJobs = (): ThunkAction<
   void,
@@ -27,7 +27,12 @@ export const toggleIsRemote = () => ({
 	type: actions.JOBS_IS_REMOTE_TOGGLE
 });
 
-export const setQuery = (query: string) => ({
+export const setQuery = (query: string | null) => ({
 	type: actions.JOBS_SET_QUERY,
   query
+});
+
+export const setCountry = (country: Country | null) => ({
+	type: actions.JOBS_SET_COUNTRY,
+  country
 });

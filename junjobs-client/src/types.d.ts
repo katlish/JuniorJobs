@@ -18,12 +18,26 @@ export interface IMapProps {
   address: string;
 }
 
+export interface ICountriesProps {
+  country: string | null;
+  setCountry: SetStateAction<null>;
+}
+
 export interface IPaginationProps {
   totalItems: number;
   itemsPerPage: number;
   paginate: (number: number) => void;
   currentPage: number;
   pagesPerBlock: number;
+}
+
+export interface Country {
+    id: string;
+    name: string;
+    flag: string;
+    alpha2: string;
+    alpha3: string;
+    ioc: string;
 }
 
 export interface UserState {
@@ -37,9 +51,9 @@ export interface JobsState {
   isLoading: boolean;
   error: any;
   data: Job[];
-  query: string;
+  query: string | null;
   isRemote: boolean;
-  country: string;
+  country: Country | null;
 }
 
 export interface Job {

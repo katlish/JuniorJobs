@@ -8,7 +8,7 @@ const initialState: JobsState = {
   data: [],
   query: "remote",
   isRemote: true,
-  country: "All"
+  country: null
 };
 
 const jobs = (state = initialState, action: AnyAction) => {
@@ -42,6 +42,12 @@ const jobs = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         query: action.query
+      };
+    }
+    case actionTypes.JOBS_SET_COUNTRY: {
+      return {
+        ...state,
+        country: action.country
       };
     }
     case actionTypes.RESET_ERROR:

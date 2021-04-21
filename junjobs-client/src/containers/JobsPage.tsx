@@ -1,15 +1,20 @@
 import React, {useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Spinner, Form } from "react-bootstrap";
-import { fetchJobs, toggleIsRemote, setQuery } from "../store/actions/jobs";
+import { fetchJobs, toggleIsRemote, setCountry } from "../store/actions/jobs";
 import { filterJobs } from '../store/selectors/jobs';
+import { Country } from "../types";
 import JobsList from "../components/JobsList/JobsList";
 import Pagination from "../components/Pagination/Pagination";
+import { PAGINATION_JOBS_PER_PAGE, PAGINATION_PAGES_PER_BLOCK } from "../store/constants/constants";
+import CountriesList from "../components/CoutriesList/CountriesList";
+
 
 const JobsPage = () => {
   const visibleJobs = useSelector(filterJobs);
   const isLoading = useSelector((state: any) => state.jobs.isLoading);
   const isRemote = useSelector((state: any) => state.jobs.isRemote);
+  const country = useSelector((state: any) => state.jobs.country);
   const error = useSelector((state: any) => state.jobs.error);
 
   const dispatch = useDispatch();
@@ -18,19 +23,22 @@ const JobsPage = () => {
     dispatch(fetchJobs());
   }, []);
 
-  const onChange = () => {
+
+  const onSwitchChange = () => {
     dispatch(toggleIsRemote());
     paginate(1);
-    if (isRemote){
-      dispatch(setQuery(""));
-    }else{
-      dispatch(setQuery("remote"));
-    }
   };
 
+  // coutry list
+  const onCountryChange = (country: Country | null) => {
+    dispatch(setCountry(country))
+    paginate(1);
+  }
+
+  //pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const [jobsPerPage] = useState(5);
-  const [pagesPerBlock] = useState(6);
+  const jobsPerPage = PAGINATION_JOBS_PER_PAGE;
+  const pagesPerBlock = PAGINATION_PAGES_PER_BLOCK;
 
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
@@ -41,19 +49,21 @@ const JobsPage = () => {
   return (
     <div className="py-4">
 
-        <Pagination totalItems={visibleJobs.length}
-            itemsPerPage={jobsPerPage}
-            paginate={paginate}
-            currentPage={currentPage}
-            pagesPerBlock={pagesPerBlock}
-        />
+      <CountriesList country={country} setCountry={onCountryChange}/>
+
+      <Pagination totalItems={visibleJobs.length}
+          itemsPerPage={jobsPerPage}
+          paginate={paginate}
+          currentPage={currentPage}
+          pagesPerBlock={pagesPerBlock}
+      />
 
       <Form className="text-center my-4">
         <Form.Check 
           type="switch"
           id="custom-switch"
           label="Remote jobs only"
-          onChange={onChange}
+          onChange={onSwitchChange}
           checked={isRemote}
         />
       </Form>
