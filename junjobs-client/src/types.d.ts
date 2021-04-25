@@ -10,8 +10,16 @@ export interface IJobsListProps {
   jobs: Job[];
 }
 
+export interface ICandidatesListProps {
+  candidates: Candidate[];
+}
+
 export interface IJobProps {
   job: Job;
+}
+
+export interface ICandidateProps {
+  candidate: Candidate;
 }
 
 export interface IMapProps {
@@ -54,6 +62,25 @@ export interface JobsState {
   query: string | null;
   isRemote: boolean;
   country: Country | null;
+}
+
+export interface CandidatesState {
+  isLoading: boolean;
+  error: any;
+  data: Candidate[];
+  isRemote: boolean;
+  country: Country | null;
+}
+
+export interface Candidate {
+  created_at: string;
+  description: string;
+  id: number;
+  jobs: string;
+  location: string;
+  name: string;
+  url: string;
+  yearsOfExperience: number;
 }
 
 export interface Job {

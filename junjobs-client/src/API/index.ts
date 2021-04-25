@@ -32,3 +32,13 @@ export const API_JOBS = axios.create({
   timeout: Number(process.env.REACT_API_JOBS_TIMEOUT),
   responseType: "json"
 });
+
+export const API_CANDIDATES = axios.create({
+  baseURL: process.env.REACT_APP_CANDIDATES_BASE_URL,
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json"
+  },
+  timeout: Number(process.env.REACT_API_JOBS_TIMEOUT),
+  responseType: "json"
+});

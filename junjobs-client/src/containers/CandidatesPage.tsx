@@ -1,26 +1,26 @@
 import React, {useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Spinner, Form } from "react-bootstrap";
-import { fetchJobs, toggleIsRemote, setCountry } from "../store/actions/jobs";
-import { filterJobs } from '../store/selectors/jobs';
+import { fetchCandidates, setCountry, toggleIsRemote } from "../store/actions/candidates";
+import { filterCandidates } from '../store/selectors/candidates';
 import { Country } from "../types";
-import JobsList from "../components/JobsList/JobsList";
+import CandidatesList from "../components/CandidatesList/CandidatesList";
 import Pagination from "../components/Pagination/Pagination";
 import { PAGINATION_ITEMS_PER_PAGE, PAGINATION_PAGES_PER_BLOCK } from "../store/constants/constants";
 import CountriesList from "../components/CoutriesList/CountriesList";
 
-
-const JobsPage = () => {
-  const visibleJobs = useSelector(filterJobs);
-  const isLoading = useSelector((state: any) => state.jobs.isLoading);
-  const isRemote = useSelector((state: any) => state.jobs.isRemote);
-  const country = useSelector((state: any) => state.jobs.country);
-  const error = useSelector((state: any) => state.jobs.error);
+//TODO: switch true will show candidates with new isremote prop
+const CandidatesPage = () => {
+  const visibleCandidates = useSelector(filterCandidates);
+  const isLoading = useSelector((state: any) => state.candidates.isLoading);
+  const isRemote = useSelector((state: any) => state.candidates.isRemote);
+  const country = useSelector((state: any) => state.candidates.country);
+  const error = useSelector((state: any) => state.candidates.error);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchJobs());
+    dispatch(fetchCandidates());
   }, []);
 
 
@@ -37,12 +37,12 @@ const JobsPage = () => {
 
   //pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const jobsPerPage = PAGINATION_ITEMS_PER_PAGE;
+  const candidatesPerPage = PAGINATION_ITEMS_PER_PAGE;
   const pagesPerBlock = PAGINATION_PAGES_PER_BLOCK;
 
-  const indexOfLastJob = currentPage * jobsPerPage;
-  const indexOfFirstJob = indexOfLastJob - jobsPerPage;
-  const currentJobsOnPage = visibleJobs.slice(indexOfFirstJob, indexOfLastJob);
+  const indexOfLastCandidate = currentPage * candidatesPerPage;
+  const indexOfFirstCandidate = indexOfLastCandidate - candidatesPerPage;
+  const currentCandidatesOnPage = visibleCandidates.slice(indexOfFirstCandidate, indexOfLastCandidate);
 
   const paginate = (curPage: number) => setCurrentPage(curPage);
 
@@ -50,31 +50,33 @@ const JobsPage = () => {
     <div className="py-4">
 
       <CountriesList country={country} setCountry={onCountryChange}/>
+      
+      <Form className="text-center my-4">
+        <Form.Check 
+          type="switch"
+          id="custom-switch"
+          label="Remote candidates only"
+          onChange={onSwitchChange}
+          checked={isRemote}
+        />
+      </Form>
 
-      <Pagination totalItems={visibleJobs.length}
-          itemsPerPage={jobsPerPage}
+      <Pagination totalItems={visibleCandidates.length}
+          itemsPerPage={candidatesPerPage}
           paginate={paginate}
           currentPage={currentPage}
           pagesPerBlock={pagesPerBlock}
       />
 
-      <Form className="text-center my-4">
-        <Form.Check 
-          type="switch"
-          id="custom-switch"
-          label="Remote jobs only"
-          onChange={onSwitchChange}
-          checked={isRemote}
-        />
-      </Form>
+      
       <p className="text-center">
-        {visibleJobs?.length} Entry Level Software Jobs Found
+        {visibleCandidates?.length} Candidates Found
         {isLoading && <Spinner as="span" variant="info" animation="border" />}
       </p>
-      <JobsList jobs={currentJobsOnPage} />
+      <CandidatesList candidates={currentCandidatesOnPage} />
       <h3 className="text-left mb-4">{error && `Error: ${error}`}</h3>
     </div>
   );
 };
 
-export default JobsPage;
+export default CandidatesPage;

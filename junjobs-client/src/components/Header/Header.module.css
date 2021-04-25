@@ -1,0 +1,17 @@
+.username {
+    color: yellow;
+}
+
+.usernameMobile {
+    color: yellow;
+    display: none ;
+}
+
+@media only screen and (max-width: 992px) {
+.usernameMobile {
+    display: block;
+}
+.username {
+    display: none ;
+}
+}

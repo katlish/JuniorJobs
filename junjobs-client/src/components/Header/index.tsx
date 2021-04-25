@@ -1,28 +1,48 @@
 import React from "react";
-import { Navbar, Nav, Button, Form, Container } from "react-bootstrap";
+import { Navbar, Nav, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import classes from "./Header.module.css";
 import { IHeaderProps } from "../../types";
 
 const Header = ({ user, loggedIn, logout }: IHeaderProps) => {
+
   return (
-    <Navbar bg="dark" variant="dark">
-      <Container>
-        <Link className="navbar-brand" to="/">
-          JUNIOR JOBS
-        </Link>
-        {!loggedIn ? (
-          <Link className="nav-link" to="/auth">
-            LOG IN
-          </Link>
-        ) : (
-          <div className="d-flex align-items-center">
-            <span className="text-white">Hi, {user.email}!</span>
-            <Button onClick={logout} as="a" variant="link" className="nav-link">
-              LOG OUT
-            </Button>
-          </div>
-        )}
-      </Container>
+    <Navbar bg="dark" variant="dark" sticky="top" expand="lg">
+      <Navbar.Brand href="/">JUNIOR JOBS</Navbar.Brand>
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Collapse id="responsive-navbar-nav">
+        <Nav className="mr-auto">
+          <Nav>
+              <h6 className={`${classes.usernameMobile} my-2`}>Hi, {user.email}</h6>
+
+              <Link className="nav-link" to="/candidates">
+              CANDIDATES
+              </Link>
+              <Link className="nav-link" to="/">
+                JOBS
+              </Link>
+          </Nav>
+        </Nav>
+        <Nav>
+          {!loggedIn ? (
+            <Link className="nav-link" to="/auth">
+              LOG IN
+            </Link>
+          ) : (
+            <>
+              <Link className="nav-link" to="/test">
+                ADD MY CANDIDATURE
+              </Link>
+              
+              <h6 className={`${classes.username} mx-3 my-auto`}>Hi, {user.email}</h6>
+              
+              <Button onClick={logout} as="a" variant="link" className="nav-link md-auto">
+                LOG OUT
+              </Button>
+            </>
+          )}
+        </Nav>
+      </Navbar.Collapse>
     </Navbar>
   );
 };

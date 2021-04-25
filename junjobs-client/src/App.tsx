@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Container } from "react-bootstrap";
+import { Redirect, Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
 import JobsPage from './containers/JobsPage';
-import { useSelector, useDispatch, batch } from "react-redux";
-import { Container, Button } from "react-bootstrap";
-import { Redirect, Route, Switch } from "react-router-dom";
-import * as actions from "./store/constants/constants";
+import CandidatesPage from "./containers/CandidatesPage";
 import { logIn, logOut } from "./store/actions/user";
 import Auth from "./components/Auth";
 import { LoginData } from "./types";
@@ -33,6 +32,9 @@ const App = () => {
         <Switch>
           <Route path="/" exact>
             <JobsPage />
+          </Route>
+          <Route path="/candidates" exact>
+            <CandidatesPage />
           </Route>
           <Route path="/auth" exact>
             {!user?.email ? (
