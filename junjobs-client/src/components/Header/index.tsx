@@ -13,7 +13,7 @@ const Header = ({ user, loggedIn, logout }: IHeaderProps) => {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
           <Nav>
-              <h6 className={`${classes.usernameMobile} my-2`}>Hi, {user.email}</h6>
+              {loggedIn && <p className={`${classes.usernameMobile} my-2`}>Hi, {user.email}</p>}
 
               <Link className="nav-link" to="/candidates">
               CANDIDATES
@@ -34,9 +34,9 @@ const Header = ({ user, loggedIn, logout }: IHeaderProps) => {
                 ADD MY CANDIDATURE
               </Link>
               
-              <h6 className={`${classes.username} mx-3 my-auto`}>Hi, {user.email}</h6>
+              <p className={`${classes.username} mx-3 my-auto`}>Hi, {user.email}</p>
               
-              <Button onClick={logout} as="a" variant="link" className="nav-link md-auto">
+              <Button className={`${classes.logout} nav-link`} onClick={logout} as="a" variant="link">
                 LOG OUT
               </Button>
             </>

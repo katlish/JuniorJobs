@@ -25,12 +25,12 @@ const CandidateCard = ({ candidate }: ICandidateProps) => {
             <Card.Title className={`${classes.Title} text-info mb-0`}>{candidate.name}</Card.Title>
           </OverlayTrigger>
         </Card.Header>
-        <p className={classes.SubTitle}>{candidate.jobs}</p>
+        <p className={classes.SubTitle}>{candidate.jobs[0]}</p>
         {/* <Card.Img className={`${classes.Image} my-2`} src={candidate.company_logo} /> */}
         <Card.Body>
           <Card.Subtitle className={`${classes.BodyText} mb-2`}>{candidate.yearsOfExperience}</Card.Subtitle>
           <Card.Subtitle className={`${classes.BodyText} mb-2`}>{candidate.location}</Card.Subtitle>
-          <Card.Subtitle className={`${classes.BodyText} mb-2`}>{candidate.created_at.split(' ').slice(0,3).join(' ')}</Card.Subtitle>
+          <Card.Subtitle className={`${classes.BodyText} mb-2`}>{candidate.createdAt}</Card.Subtitle>
         </Card.Body>
         <Button className="align-self-end m-2" variant="info" onClick={() => setShowModal(candidate)}>
           MORE INFO

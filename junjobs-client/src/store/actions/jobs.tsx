@@ -1,7 +1,7 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import * as actions from "../constants/constants";
-import { API_JOBS } from "../../API";
+import { API_BASE_URL } from "../../API";
 import { JobsState, Country } from "../../types";
 
 export const fetchJobs = (): ThunkAction<
@@ -12,7 +12,7 @@ export const fetchJobs = (): ThunkAction<
 > => async dispatch => {
   try {
     dispatch({ type: actions.JOBS_FETCH_BEGIN });
-    const { data } = await API_JOBS.get(`/api/jobs`);
+    const { data } = await API_BASE_URL.get(`/jobs`);
     dispatch({ type: actions.JOBS_FETCH_SUCCESS, payload: data });
   } catch (e) {
     dispatch({
@@ -27,10 +27,6 @@ export const toggleIsRemote = () => ({
 	type: actions.JOBS_IS_REMOTE_TOGGLE
 });
 
-export const setQuery = (query: string | null) => ({
-	type: actions.JOBS_SET_QUERY,
-  query
-});
 
 export const setCountry = (country: Country | null) => ({
 	type: actions.JOBS_SET_COUNTRY,

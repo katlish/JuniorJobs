@@ -2,7 +2,7 @@ import * as actions from "../constants/constants";
 import jwt_decode, { JwtPayload } from "jwt-decode";
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { API_USER } from "../../API";
+import { API_BASE_URL } from "../../API";
 import { UserState } from "../../types";
 
 export const logIn = (
@@ -10,7 +10,7 @@ export const logIn = (
 ): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
   try {
     dispatch({ type: actions.USER_LOGIN_BEGIN });
-    const { data } = await API_USER.post("/auth/login", payload);
+    const { data } = await API_BASE_URL.post("/auth/login", payload);
     dispatch({ type: actions.USER_LOGIN_SUCCESS, payload: data });
   } catch (e) {
     dispatch({

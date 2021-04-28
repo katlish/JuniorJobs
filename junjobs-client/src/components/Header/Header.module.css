@@ -7,11 +7,15 @@
     display: none ;
 }
 
+.logout {
+    width: fit-content;    
+}
+
 @media only screen and (max-width: 992px) {
-.usernameMobile {
-    display: block;
-}
-.username {
-    display: none ;
-}
+    .usernameMobile {
+        display: block;
+    }
+    .username {
+        display: none ;
+    }
 }

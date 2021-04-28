@@ -59,7 +59,6 @@ export interface JobsState {
   isLoading: boolean;
   error: any;
   data: Job[];
-  query: string | null;
   isRemote: boolean;
   country: Country | null;
 }
@@ -73,28 +72,34 @@ export interface CandidatesState {
 }
 
 export interface Candidate {
-  created_at: string;
+  createdAt: string;
   description: string;
-  id: number;
-  jobs: string;
+  _id: string;
+  jobs: String[];
   location: string;
   name: string;
   url: string;
   yearsOfExperience: number;
+  isremote: boolean;
 }
 
+
+
 export interface Job {
-  id: string;
+  _id: string;
   type: string;
   url: string;
-  created_at: string;
+  createdAt: string;
   company: string;
   location: string;
   title: string;
   description: string;
   how_to_apply: string;
   company_logo: string;
+  jobs: String[];
+  isremote: boolean;
 }
+
 
 export interface LoginData {
   email: string;

@@ -6,7 +6,6 @@ import Map from "../Map/Map";
 import classes from "./MyCard.module.css";
 import { IJobProps, Job } from "../../types";
 
-// FIXME: dangerous html
 const JobCard = ({ job }: IJobProps) => {
   const [showModal, setShowModal] = useState<Job | null>(null);
 
@@ -28,7 +27,7 @@ const JobCard = ({ job }: IJobProps) => {
         <Card.Img className={`${classes.Image} my-2`} src={job.company_logo} />
         <Card.Body>
           <Card.Subtitle className={`${classes.BodyText} mb-2`}>{job.location}</Card.Subtitle>
-          <Card.Subtitle className={`${classes.BodyText} mb-2`}>{job.created_at.split(' ').slice(0,3).join(' ')}</Card.Subtitle>
+          <Card.Subtitle className={`${classes.BodyText} mb-2`}>{job.createdAt}</Card.Subtitle>
         </Card.Body>
         <Button className="align-self-end m-2" variant="info" onClick={() => setShowModal(job)}>
           MORE INFO
@@ -52,8 +51,7 @@ const JobCard = ({ job }: IJobProps) => {
         </div>
 
         <Card.Body>
-          <div dangerouslySetInnerHTML={{__html: job.description}} 
-            />
+          {job.description}
         </Card.Body>
 
         <Modal.Footer>

@@ -6,7 +6,6 @@ const initialState: JobsState = {
   isLoading: true,
   error: null,
   data: [],
-  query: "remote",
   isRemote: true,
   country: null
 };
@@ -36,12 +35,6 @@ const jobs = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         isRemote: !state.isRemote
-      };
-    }
-    case actionTypes.JOBS_SET_QUERY: {
-      return {
-        ...state,
-        query: action.query
       };
     }
     case actionTypes.JOBS_SET_COUNTRY: {

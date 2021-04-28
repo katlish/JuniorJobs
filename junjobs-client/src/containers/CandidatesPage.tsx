@@ -9,7 +9,7 @@ import Pagination from "../components/Pagination/Pagination";
 import { PAGINATION_ITEMS_PER_PAGE, PAGINATION_PAGES_PER_BLOCK } from "../store/constants/constants";
 import CountriesList from "../components/CoutriesList/CountriesList";
 
-//TODO: switch true will show candidates with new isremote prop
+
 const CandidatesPage = () => {
   const visibleCandidates = useSelector(filterCandidates);
   const isLoading = useSelector((state: any) => state.candidates.isLoading);

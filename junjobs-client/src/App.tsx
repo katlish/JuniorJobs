@@ -13,15 +13,6 @@ const App = () => {
   const user = useSelector((state: any) => state.user.data);
   const loggedIn = useSelector((state: any) => state.user.loggedIn);
 
-  // useEffect(() => {
-  //   dispatch({ type: actions.USER_LOGIN_BEGIN });
-  // }, []);
-
-  // const logindata = {
-  //   email: "kattest@cc.com",
-  //   password: "240689"
-  // };
-
   return (
     <div>
       <Header 

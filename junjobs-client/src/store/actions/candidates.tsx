@@ -1,8 +1,8 @@
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import * as actions from "../constants/constants";
-import { API_CANDIDATES } from "../../API";
-import { CandidatesState, Candidate, Country } from "../../types";
+import { API_BASE_URL } from "../../API";
+import { CandidatesState, Country } from "../../types";
 
 export const fetchCandidates = (): ThunkAction<
   void,
@@ -12,21 +12,8 @@ export const fetchCandidates = (): ThunkAction<
 > => async dispatch => {
   try {
     dispatch({ type: actions.CANDIDATES_FETCH_BEGIN });
-    const { data } = await API_CANDIDATES.get(`/candidates.json`);
-    const candidates: Candidate[] = [];
-    Object.keys(data).forEach((candidate, index) => {
-      candidates.push({
-        id: data[candidate][0].id,
-        name: data[candidate][0].name,
-        yearsOfExperience: data[candidate][0].yearsOfExperience,
-        jobs: data[candidate][0].jobs,
-        location: data[candidate][0].location,
-        description: data[candidate][0].description,
-        url: data[candidate][0].url,
-        created_at: data[candidate][0].created_at
-      });
-    });
-    dispatch({ type: actions.CANDIDATES_FETCH_SUCCESS, payload: candidates });
+    const { data } = await API_BASE_URL.get('/candidates');
+    dispatch({ type: actions.CANDIDATES_FETCH_SUCCESS, payload: data });
   } catch (e) {
     dispatch({
       type: actions.CANDIDATES_FETCH_FAILURE,

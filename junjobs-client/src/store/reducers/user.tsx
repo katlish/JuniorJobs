@@ -1,6 +1,6 @@
 import * as actionTypes from "../constants/constants";
 import { AnyAction } from "redux";
-import { API_USER } from "../../API/";
+import { API_BASE_URL } from "../../API/";
 import { UserState } from "../../types";
 
 const initialState: UserState = {
@@ -20,7 +20,7 @@ const user = (state = initialState, action: AnyAction) => {
       };
     case actionTypes.USER_LOGIN_SUCCESS: {
       localStorage.setItem("token", action.payload.token);
-      API_USER.defaults.headers.common = {
+      API_BASE_URL.defaults.headers.common = {
         Authorization: `bearer ${action.payload.token}`
       };
       return {
@@ -39,7 +39,7 @@ const user = (state = initialState, action: AnyAction) => {
       };
     }
     case actionTypes.USER_SET_TOKEN: {
-      API_USER.defaults.headers.common = {
+      API_BASE_URL.defaults.headers.common = {
         Authorization: `bearer ${action.payload.token}`
       };
       return {
