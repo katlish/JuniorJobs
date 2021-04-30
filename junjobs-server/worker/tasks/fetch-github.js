@@ -1,104 +1,86 @@
-var fetch = require('node-fetch')
-const redis = require("redis");
-client = redis.createClient();
+const axios = require('axios').default;
 
-const { promisify } = require("util");
-const setAsync = promisify(client.set).bind(client);
+const githubUrl = 'https://jobs.github.com/positions.json';
+const jobsUrl = 'http://localhost:4000/jobs';
 
-const baseUrl = 'https://jobs.github.com/positions.json'
 
-function updateArrIfNameIncludes(beforeAfterObj, locationLongStr, arrToUpdate, i){
-    let tempLoc;
-    if (locationLongStr.includes(beforeAfterObj.nameBefore) && !locationLongStr.includes(beforeAfterObj.nameAfter)) {
-        if (beforeAfterObj.isReplace) {
-            tempLoc = arrToUpdate[i].location.replace(beforeAfterObj.nameBefore, beforeAfterObj.nameAfter);
-        } else {
-            tempLoc = arrToUpdate[i].location.concat(`, ${beforeAfterObj.nameAfter}`);
-        }
-        arrToUpdate[i].location = tempLoc;
-        return true;
-    }
-    return false;
-}
+const insertIntoDB = async (jobsToInsert) => {
+    try{
+        addMissingProps(jobsToInsert);
 
-function countriesParser(allJobs) {
-      let allJobsUpdated = allJobs;
-      [
-        {nameBefore: "USA", nameAfter: "United States ", isReplace: true}, 
-        {nameBefore: "Russia", nameAfter: "Russian Federation", isReplace: true},
-        {nameBefore: "UK", nameAfter: "United Kingdom", isReplace: true},
-        {nameBefore: "US", nameAfter: "United States", isReplace: false},
-        {nameBefore: "CA", nameAfter: "United States", isReplace: false},
-        {nameBefore: "NJ", nameAfter: "United States", isReplace: false},
-        {nameBefore: "GA", nameAfter: "United States", isReplace: false},
-        {nameBefore: "VA", nameAfter: "United States", isReplace: false},
-        {nameBefore: "CO", nameAfter: "United States", isReplace: false},
-        {nameBefore: "FL", nameAfter: "United States", isReplace: false},
-        {nameBefore: "IL", nameAfter: "United States", isReplace: false},
-        {nameBefore: "MA", nameAfter: "United States", isReplace: false},
-        {nameBefore: "MD", nameAfter: "United States", isReplace: false},
-        {nameBefore: "MN", nameAfter: "United States", isReplace: false},
-        {nameBefore: "CT", nameAfter: "United States", isReplace: false},
-        {nameBefore: "New York", nameAfter: "United States", isReplace: false},
-        {nameBefore: "Menlo Park", nameAfter: "United States", isReplace: false},
-        {nameBefore: "Munich", nameAfter: "Germany", isReplace: false},
-        {nameBefore: "München", nameAfter: "Germany", isReplace: false},
-        {nameBefore: "Berlin", nameAfter: "Germany", isReplace: false},
-        {nameBefore: "Düsseldorf", nameAfter: "Germany", isReplace: false},
-        {nameBefore: "Amsterdam", nameAfter: "Netherlands", isReplace: false},
-        {nameBefore: "Utrecht", nameAfter: "Netherlands", isReplace: false},
-        {nameBefore: "London", nameAfter: "United Kingdom", isReplace: false}
-      ].forEach(obj => {
-        allJobs.forEach((job,i) => {
-            updateArrIfNameIncludes(obj, job.location, allJobsUpdated, i);
+        jobsToInsert.forEach(async (job,i) => {
+            await axios.post(jobsUrl, job);
         });
-    })
-  
-    return allJobsUpdated;
+    }catch(e){
+        console.log("error-", e.message);
+    }
 }
 
-async function fetchGithub() {
-    let resultCount = 1
+const filterByWordInTitle = (jobs, wordsToCheck) => {
+    const juniorJobs = jobs.filter(job => {
+        const title = job.title.toLowerCase()
+        return !wordsToCheck.some(word => title.includes(word));
+    });
+    return juniorJobs;
+}
+
+const isRemote = (job) => {
+    const title = job.title.toLowerCase();
+    const location = job.location.toLowerCase();
+    return title.includes("remote") || location.includes("remote");
+}
+
+const checkJobType = (job) => {
+    const types = [];
+    const title = job.title.toLowerCase();
+
+    if (["fullstack","full stack"].some(type => title.includes(type))){
+        types.push("fullstack");
+    }
+    if (["frontend","react", "front-end", "ui"].some(type => title.includes(type))){
+        types.push("frontend");
+    }
+    if (["backend","software"].some(type => title.includes(type))){
+        types.push("backend");
+    }
+
+    return types;
+}
+
+const addMissingProps = (jobs) => {
+    jobs.forEach((job,i) => {
+        job.externalId = job.id;
+        job.isremote = isRemote(job);
+        job.jobs = checkJobType(job);
+    });
+}
+
+const fetchGithub = async () => {
+    console.log("fetch started");
+    let jobsCount = 1
     let onPage = 0
     const allJobs =[]
 
-
-    while (resultCount > 0) {
-        const res = await fetch(`${baseUrl}?page=${onPage}`)
-        const jobs = await res.json()
-        allJobs.push(...jobs)
-        resultCount = jobs.length
-        console.log('got', resultCount, 'jobs')
-        onPage++
+    try {
+        while (jobsCount > 0) {
+            const { data } = await axios.get(`${githubUrl}?page=${onPage}`);
+            jobsCount = data.length;
+            if (jobsCount) {
+                allJobs.push(...data);
+            }
+            console.log('got', jobsCount);
+            onPage++;
+        }
+    }catch(e){
+        console.log('error in github server - ', e.message);
     }
-
-    console.log('got', allJobs.length, 'jobs')
-
-    const juniorJobs = allJobs.filter(job => {
-        const title = job.title.toLowerCase()
-
-        if (title.includes('senior') || 
-            title.includes('manager') ||
-            title.includes('sr.') ||
-            title.includes('architect') ||
-            title.includes('devops') || 
-            title.includes('lead') ||
-            title.includes('dev ops') ||
-            title.includes('expert') ||
-            title.includes('experienced') ||
-            title.includes('head') ||
-            title.includes('director') ||
-            title.includes('principal')) {
-            return false
-        } 
-        return true
-    })
-    console.log('filtered down to - ', juniorJobs.length)
-    const jobsWithStandartNames = countriesParser(juniorJobs);
-    const success = await setAsync('github', JSON.stringify(jobsWithStandartNames))
-    console.log({success})
+    
+    console.log('got BEFORE filter - ', allJobs.length, 'jobs')
+    const wordsToCheck = ['senior','manager','sr.','architect','devops','lead','dev ops','dev/ops','expert','experienced','head','director','principal'];
+    const juniorJobs = filterByWordInTitle(allJobs, wordsToCheck);
+    console.log('got AFTER filter - ', juniorJobs.length);
+    
+    await insertIntoDB(juniorJobs);
 }
 
-fetchGithub()
-
-module.exports = fetchGithub
+module.exports = fetchGithub;

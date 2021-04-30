@@ -32,7 +32,7 @@ app.use((error, req, res, next) => {
 mongoose
 	.connect(
 		process.env.DB_CONNECTION,
-		{ useNewUrlParser: true, useUnifiedTopology: true },
+		{ useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false },
 	)
 	.then((result) => {
 		app.listen(4000, () => console.log('Server is running on 4000'));

@@ -12,42 +12,26 @@ exports.get = async (req, res, next) => {
 	}
 };
 
-
-exports.create = async (req, res, next) => {
+exports.createOrUpdate = async (req, res, next) => {
 	try {
-		const { title, company, description, location, url, type, how_to_apply, company_logo, jobs, isremote } = req.body;
-		const createdJob = await Job.create({
-			title,
-			company, 
-			description, 
-			location, 
-			url, 
-			type, 
-			how_to_apply, 
-			company_logo, 
-			jobs, 
-			isremote
-		});
-		res.status(201).json(createdJob);
-	} catch (err) {
-		if (!err.statusCode) {
-			err.statusCode = 500;
-		}
-		next(err);
-	}
-};
+		const filter = { externalId: req.body.externalId };
 
-exports.update = async (req, res, next) => {
-	try {
-		const { id } = req.params;
-		const updatedJob = await Job.findByIdAndUpdate(id, req.body, {
+		// await Job.countDocuments(filter, function (err, count) {
+		// 	console.log('there are %d matches', count)}); 
+
+		let dbres = await Job.findOneAndUpdate(filter, req.body, {
 			new: true,
+			upsert: true,
+			rawResult: true // Return the raw result from the MongoDB driver
 		});
-		res.status(200).json(updatedJob);
-	} catch (err) {
-		if (!err.statusCode) {
-			err.statusCode = 500;
+
+		// console.log("updatedExisting - ", dbres.lastErrorObject.updatedExisting);
+		res.status(201).json(dbres.value);
+
+		} catch (err) {
+			if (!err.statusCode) {
+				err.statusCode = 500;
+			}
+			next(err);
 		}
-		next(err);
-	}
 };

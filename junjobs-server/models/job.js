@@ -5,6 +5,10 @@ const Schema = mongoose.Schema;
 
 const jobSchema = new Schema(
 	{
+		externalId: {
+			type: String,
+			required: true
+		},
 		title: {
 			type: String,
 			required: true,
