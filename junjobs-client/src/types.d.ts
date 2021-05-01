@@ -72,6 +72,7 @@ export interface CandidatesState {
 }
 
 export interface Candidate {
+  email: string;
   createdAt: string;
   description: string;
   _id: string;

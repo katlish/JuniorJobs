@@ -12,38 +12,22 @@ exports.get = async (req, res, next) => {
 	}
 };
 
-exports.create = async (req, res, next) => {
+exports.createOrUpdate = async (req, res, next) => {
 	try {
-		const { name, description, location, url, yearsOfExperience, jobs, isremote } = req.body;
-		const createdCandidate = await Candidate.create({
-			name, 
-            description, 
-            location, 
-            url, 
-            yearsOfExperience, 
-            jobs, 
-            isremote
-		});
-		res.status(201).json(createdCandidate);
-	} catch (err) {
-		if (!err.statusCode) {
-			err.statusCode = 500;
-		}
-		next(err);
-	}
-};
+		const filter = { email: req.body.email };
 
-exports.update = async (req, res, next) => {
-	try {
-		const { id } = req.params;
-		const updatedCandidate = await Candidate.findByIdAndUpdate(id, req.body, {
+		let dbres = await Candidate.findOneAndUpdate(filter, req.body, {
 			new: true,
+			upsert: true,
+			rawResult: true // Return the raw result from the MongoDB driver
 		});
-		res.status(200).json(updatedCandidate);
-	} catch (err) {
-		if (!err.statusCode) {
-			err.statusCode = 500;
+
+		res.status(201).json(dbres.value);
+
+		} catch (err) {
+			if (!err.statusCode) {
+				err.statusCode = 500;
+			}
+			next(err);
 		}
-		next(err);
-	}
 };

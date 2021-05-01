@@ -31,6 +31,25 @@ const candidates = (state = initialState, action: AnyAction) => {
         error: action.payload
       };
     }
+    case actionTypes.CANDIDATES_ADD_OR_UPDATE_CANDIDATE_BEGIN:
+      return {
+        ...state,
+        isLoading: true
+    }
+    case actionTypes.CANDIDATES_ADD_OR_UPDATE_CANDIDATE_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        data: action.payload
+      };
+    }
+    case actionTypes.CANDIDATES_ADD_OR_UPDATE_CANDIDATE_FAILURE: {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload
+      };
+    }
     case actionTypes.CANDIDATES_SET_COUNTRY: {
       return {
         ...state,

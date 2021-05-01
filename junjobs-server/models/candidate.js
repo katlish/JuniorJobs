@@ -6,6 +6,10 @@ const Schema = mongoose.Schema;
 
 const candidateSchema = new Schema(
 	{
+		email: {
+			type: String,
+			required: true,
+		},
 		name: {
 			type: String,
 			required: true,

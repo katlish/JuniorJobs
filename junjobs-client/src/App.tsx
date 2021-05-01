@@ -1,10 +1,12 @@
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { Container } from "react-bootstrap";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
 import JobsPage from './containers/JobsPage';
 import CandidatesPage from "./containers/CandidatesPage";
-import { logIn, logOut } from "./store/actions/user";
+import AddCandidatePage from "./containers/AddCandidatePage";
+import { logIn, logOut, setUserToken } from "./store/actions/user";
 import Auth from "./components/Auth";
 import { LoginData } from "./types";
 
@@ -12,6 +14,13 @@ const App = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user.data);
   const loggedIn = useSelector((state: any) => state.user.loggedIn);
+  const token = localStorage.getItem('token');
+
+	useEffect(() => {
+		if (token) {
+			dispatch(setUserToken(token));
+		}
+	}, []);
 
   return (
     <div>
@@ -34,11 +43,15 @@ const App = () => {
                 logIn={(userData: LoginData) => dispatch(logIn(userData))}
               />
             ) : (
-              <Redirect to="/success" />
+              <Redirect to="/" />
             )}
           </Route>
-          <Route path="/success" exact>
-            <div>Success! {user?.email}</div>
+          <Route path="/add-my-candidate" exact>
+            {user?.email ? (
+              <AddCandidatePage />
+            ) : (
+              <Redirect to="/" />
+            )}
           </Route>
         </Switch>
       </Container>

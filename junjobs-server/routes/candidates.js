@@ -6,8 +6,6 @@ const router = express.Router();
 
 router.get('/', candidatesController.get);
 
-router.post('/', isAuth, candidatesController.create);
-
-router.patch('/:id', isAuth, candidatesController.update);
+router.post('/', isAuth, candidatesController.createOrUpdate);
 
 module.exports = router;

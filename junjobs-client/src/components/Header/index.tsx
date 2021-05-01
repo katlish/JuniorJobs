@@ -30,7 +30,7 @@ const Header = ({ user, loggedIn, logout }: IHeaderProps) => {
             </Link>
           ) : (
             <>
-              <Link className="nav-link" to="/test">
+              <Link className="nav-link" to="/add-my-candidate">
                 ADD MY CANDIDATURE
               </Link>
               

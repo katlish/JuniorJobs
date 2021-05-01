@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import AuthForm from "./AuthForm";
@@ -31,7 +30,7 @@ const Auth = ({ show = false, logIn }: IAuthProps) => {
       setStatus(null);
       try {
         await logIn(values);
-        history.push("/success");
+        history.push("/");
       } catch (e) {
         setStatus({
           type: "danger",
