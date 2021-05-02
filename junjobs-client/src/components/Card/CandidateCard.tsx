@@ -49,7 +49,7 @@ const CandidateCard = ({ candidate }: ICandidateProps) => {
 				</Modal.Header>
 
         <div className={classes.CardMapContainer}>
-          <Map address={candidate.location}/>
+          {candidate.location && <Map address={candidate.location}/>}
         </div>
 
         <Card.Body>

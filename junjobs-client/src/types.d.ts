@@ -26,6 +26,11 @@ export interface IMapProps {
   address: string;
 }
 
+export interface IAddCandidatePageProps {
+  email: string;
+  submitHandler: (candidate: Candidate) => void;
+}
+
 export interface ICountriesProps {
   country: string | null;
   setCountry: SetStateAction<null>;
@@ -73,11 +78,11 @@ export interface CandidatesState {
 
 export interface Candidate {
   email: string;
-  createdAt: string;
+  createdAt?: string;
   description: string;
-  _id: string;
+  _id?: string;
   jobs: String[];
-  location: string;
+  location: string | null;
   name: string;
   url: string;
   yearsOfExperience: number;

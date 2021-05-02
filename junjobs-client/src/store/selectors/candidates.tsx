@@ -13,7 +13,7 @@ export const filterCandidates = createSelector(getCandidates, getCountry, getIsR
 	let filteredCandidates: Candidate [] = [...candidates];
 
 	if (country){
-		filteredCandidates = filteredCandidates.filter((candidate : Candidate) => candidate.location.toLowerCase().includes(country.name.toLowerCase()));
+		filteredCandidates = filteredCandidates.filter((candidate : Candidate) => candidate.location?.toLowerCase().includes(country.name.toLowerCase()));
 	}
 
 	if (isRemote){

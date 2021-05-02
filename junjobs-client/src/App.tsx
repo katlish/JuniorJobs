@@ -3,12 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { Container } from "react-bootstrap";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
+import Auth from "./components/Auth";
 import JobsPage from './containers/JobsPage';
 import CandidatesPage from "./containers/CandidatesPage";
 import AddCandidatePage from "./containers/AddCandidatePage";
 import { logIn, logOut, setUserToken } from "./store/actions/user";
-import Auth from "./components/Auth";
-import { LoginData } from "./types";
+import { addOrUpdateCandidate } from "./store/actions/candidates";
+import { LoginData, Candidate } from "./types";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,11 @@ const App = () => {
 			dispatch(setUserToken(token));
 		}
 	}, []);
+
+  //FIXME: show success message on submit
+  const addCandidate = (candidate: Candidate) => {
+    dispatch(addOrUpdateCandidate(candidate));
+  };
 
   return (
     <div>
@@ -48,7 +54,7 @@ const App = () => {
           </Route>
           <Route path="/add-my-candidate" exact>
             {user?.email ? (
-              <AddCandidatePage />
+              <AddCandidatePage email={user?.email} submitHandler={addCandidate}/>
             ) : (
               <Redirect to="/" />
             )}
