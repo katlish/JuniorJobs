@@ -23,11 +23,6 @@ const App = () => {
 		}
 	}, []);
 
-  //FIXME: show success message on submit
-  const addCandidate = (candidate: Candidate) => {
-    dispatch(addOrUpdateCandidate(candidate));
-  };
-
   return (
     <div>
       <Header 
@@ -54,7 +49,10 @@ const App = () => {
           </Route>
           <Route path="/add-my-candidate" exact>
             {user?.email ? (
-              <AddCandidatePage email={user?.email} submitHandler={addCandidate}/>
+              <AddCandidatePage 
+                email={user?.email} 
+                submitHandler={(candidate: Candidate) => dispatch(addOrUpdateCandidate(candidate))}
+              />
             ) : (
               <Redirect to="/" />
             )}

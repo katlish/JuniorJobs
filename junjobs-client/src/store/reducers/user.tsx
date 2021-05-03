@@ -11,6 +11,7 @@ const initialState: UserState = {
 };
 
 // TODO: add signUP
+//FIXME: move logic with tokens outside
 const user = (state = initialState, action: AnyAction) => {
   switch (action.type) {
     case actionTypes.USER_LOGIN_BEGIN:
@@ -26,6 +27,7 @@ const user = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         isLoading: false,
+        error: null,
         loggedIn: true,
         data: action.payload
       };
@@ -34,8 +36,8 @@ const user = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         isLoading: false,
+        error: action.payload,
         loggedIn: false,
-        error: action.payload
       };
     }
     case actionTypes.USER_SET_TOKEN: {

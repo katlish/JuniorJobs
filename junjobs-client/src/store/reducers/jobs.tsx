@@ -21,6 +21,7 @@ const jobs = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         isLoading: false,
+        error: null,
         data: action.payload
       };
     }

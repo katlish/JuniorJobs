@@ -1,12 +1,14 @@
 import { Form, Button, Spinner } from 'react-bootstrap';
 import { validationSchema } from './utils/Validations';
 import { useFormik } from 'formik';
+import { useHistory } from "react-router-dom";
 import CountriesList from '../components/CoutriesList/CountriesList';
 import { IAddCandidatePageProps , Candidate, Country } from '../types';
 
 
-//FIXME: reset error in candidates state
+//FIXME: fill the form with already existing data in the db
 const AddCandidatePage = ({email, submitHandler}: IAddCandidatePageProps) => {
+    const history = useHistory();
     
     const initialValues = {
         email,
@@ -32,12 +34,12 @@ const AddCandidatePage = ({email, submitHandler}: IAddCandidatePageProps) => {
 
 			setStatus(null);
 			try {
-				submitHandler(candidate);
+				await submitHandler(candidate);
+                resetForm();
 				setStatus({
 					type: 'success',
-					text: 'Success',
+					text: 'Success! We Added Your Candidature!',
 				});
-				resetForm();
 			} catch (e) {
 				setStatus({
 					type: 'danger',
@@ -53,101 +55,118 @@ const AddCandidatePage = ({email, submitHandler}: IAddCandidatePageProps) => {
     }
 
 	return (
-		<Form noValidate onSubmit={formik.handleSubmit}>
-			<Form.Group controlId="email">
-				<Form.Label>Email</Form.Label>
-				<Form.Control
-					value={formik.values.email}
-                    readOnly
-				></Form.Control>
-			</Form.Group>
-            <Form.Group controlId="name">
-				<Form.Label>Name</Form.Label>
-				<Form.Control
-					onChange={formik.handleChange}
-					value={formik.values.name}
-					placeholder="type here"
-					type="text"
-					isInvalid={!!(formik.touched.name && formik.errors.name)}
-					isValid={formik.touched.name && !formik.errors.name}
-				></Form.Control>
-				<Form.Control.Feedback type="invalid">
-					{formik.errors.name}
-				</Form.Control.Feedback>
-			</Form.Group>
-            <Form.Group controlId="yearsOfExperience">
-				<Form.Label>Years Of Experience</Form.Label>
-				<Form.Control
-					onChange={formik.handleChange}
-					value={formik.values.yearsOfExperience}
-					type="text"
-					isInvalid={!!(formik.touched.yearsOfExperience && formik.errors.yearsOfExperience)}
-					isValid={formik.touched.yearsOfExperience && !formik.errors.yearsOfExperience}
-				></Form.Control>
-				<Form.Control.Feedback type="invalid">
-					{formik.errors.yearsOfExperience}
-				</Form.Control.Feedback>
-			</Form.Group>
-			<Form.Group>
-                <Form.Check inline type="checkbox" id="fullstack" label="fullstack" onChange={() => formik.setFieldValue("jobType", {...formik.values.jobType, fullstack: !formik.values.jobType.fullstack})}/>
-                <Form.Check inline type="checkbox" id="backend"label="backend" onChange={() => formik.setFieldValue("jobType", {...formik.values.jobType, backend: !formik.values.jobType.backend})}/>
-                <Form.Check inline type="checkbox" id="frontend"label="frontend" onChange={() => formik.setFieldValue("jobType", {...formik.values.jobType, frontend: !formik.values.jobType.frontend})}/>
-            </Form.Group>
-            <Form.Group>
-				<Form.Label>Location</Form.Label>
-                <CountriesList country={formik.values.location} setCountry={onCountryChange}/>
-			</Form.Group>
-            <Form.Group controlId="description">
-                <Form.Label>Description</Form.Label>
-                <Form.Control 
-                    as="textarea" 
-                    rows={3}
-                    onChange={formik.handleChange}
-					value={formik.values.description}
-					type="text"
-					isInvalid={!!(formik.touched.description && formik.errors.description)}
-					isValid={formik.touched.description && !formik.errors.description}
-                 />
-                 <Form.Control.Feedback type="invalid">
-					{formik.errors.description}
-				</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group controlId="url">
-				<Form.Label>URL</Form.Label>
-				<Form.Control
-					onChange={formik.handleChange}
-					value={formik.values.url}
-					placeholder="type here"
-					type="text"
-					isInvalid={!!(formik.touched.url && formik.errors.url)}
-					isValid={formik.touched.url && !formik.errors.url}
-				></Form.Control>
-				<Form.Control.Feedback type="invalid">
-					{formik.errors.url}
-				</Form.Control.Feedback>
-			</Form.Group> 
-		    <Form.Group controlId="isremote">
-                <Form.Check inline type="checkbox" label="Is Remote" id="isremote" onChange={() => formik.setFieldValue("isremote", !formik.values.isremote)}/>
-            </Form.Group>
-			
-			<div className="d-flex justify-content-end align-items-center">
-				{formik.status && (
-					<div className={`text-${formik.status.type} mr-auto`}>
-						{formik.status.text}
-					</div>
-				)}
-				{formik.isSubmitting && (
-					<Spinner animation="border" variant="info" className="mr-2" />
-				)}
-				<Button
-					disabled={formik.isSubmitting}
-					variant="success"
-					type="submit"
-				>
-					Submit
-				</Button>
-			</div>
-		</Form>
+        <>
+        <h3 className="my-3 text-center">
+                ADD YOUR CANDIDATURE
+        </h3>
+        <div className="py-4 mb-2 d-flex justify-content-center">
+            
+            <Form noValidate onSubmit={formik.handleSubmit}>
+                <Form.Group controlId="email">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                        value={formik.values.email}
+                        readOnly
+                    ></Form.Control>
+                </Form.Group>
+                <Form.Group controlId="name">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                        onChange={formik.handleChange}
+                        value={formik.values.name}
+                        placeholder="type here"
+                        type="text"
+                        isInvalid={!!(formik.touched.name && formik.errors.name)}
+                        isValid={formik.touched.name && !formik.errors.name}
+                    ></Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                        {formik.errors.name}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="yearsOfExperience">
+                    <Form.Label>Years Of Experience</Form.Label>
+                    <Form.Control
+                        onChange={formik.handleChange}
+                        value={formik.values.yearsOfExperience}
+                        type="text"
+                        isInvalid={!!(formik.touched.yearsOfExperience && formik.errors.yearsOfExperience)}
+                        isValid={formik.touched.yearsOfExperience && !formik.errors.yearsOfExperience}
+                    ></Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                        {formik.errors.yearsOfExperience}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Check inline type="checkbox" id="fullstack" label="fullstack" onChange={() => formik.setFieldValue("jobType", {...formik.values.jobType, fullstack: !formik.values.jobType.fullstack})}/>
+                    <Form.Check inline type="checkbox" id="backend"label="backend" onChange={() => formik.setFieldValue("jobType", {...formik.values.jobType, backend: !formik.values.jobType.backend})}/>
+                    <Form.Check inline type="checkbox" id="frontend"label="frontend" onChange={() => formik.setFieldValue("jobType", {...formik.values.jobType, frontend: !formik.values.jobType.frontend})}/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Location</Form.Label>
+                    <CountriesList country={formik.values.location} setCountry={onCountryChange}/>
+                </Form.Group>
+                <Form.Group controlId="description">
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control 
+                        as="textarea" 
+                        rows={3}
+                        onChange={formik.handleChange}
+                        value={formik.values.description}
+                        type="text"
+                        isInvalid={!!(formik.touched.description && formik.errors.description)}
+                        isValid={formik.touched.description && !formik.errors.description}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {formik.errors.description}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group controlId="url">
+                    <Form.Label>URL</Form.Label>
+                    <Form.Control
+                        onChange={formik.handleChange}
+                        value={formik.values.url}
+                        placeholder="type here"
+                        type="text"
+                        isInvalid={!!(formik.touched.url && formik.errors.url)}
+                        isValid={formik.touched.url && !formik.errors.url}
+                    ></Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                        {formik.errors.url}
+                    </Form.Control.Feedback>
+                </Form.Group> 
+                <Form.Group controlId="isremote">
+                    <Form.Check inline type="checkbox" label="Is Remote" id="isremote" onChange={() => formik.setFieldValue("isremote", !formik.values.isremote)}/>
+                </Form.Group>
+                
+                <div className="d-flex justify-content-end align-items-center">
+                    
+                    {formik.isSubmitting && (
+                        <Spinner animation="border" variant="info" className="mr-2" />
+                    )}
+                    <Button
+                        as="a" 
+                        bsPrefix="unset"
+                        className="mx-3"
+                        onClick={() => history.push("/candidates")}
+                    >
+                        Back To All Candidates
+                    </Button>
+                    <Button
+                        disabled={formik.isSubmitting}
+                        variant="success"
+                        type="submit"
+                    >
+                        Submit
+                    </Button>
+                </div>
+                {formik.status && (
+                    <div className={`text-${formik.status.type} mr-auto py-3`}>
+                        {formik.status.text}
+                    </div>
+                )}
+            </Form>
+        </div>
+        </>
 	);
 }
 

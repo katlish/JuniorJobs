@@ -21,7 +21,8 @@ const candidates = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         isLoading: false,
-        data: action.payload
+        error: null,
+        data: action.payload,
       };
     }
     case actionTypes.CANDIDATES_FETCH_FAILURE: {
@@ -40,6 +41,7 @@ const candidates = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         isLoading: false,
+        error: null,
         data: action.payload
       };
     }
