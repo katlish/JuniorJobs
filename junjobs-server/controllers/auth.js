@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 exports.signUp = async (req, res, next) => {
-	const { email, password } = req.body;
+	const { email, password, firstname, lastname, role } = req.body;
 	try {
 		const existingUser = await User.findOne({ email });
 		if (existingUser) {
@@ -15,14 +15,14 @@ exports.signUp = async (req, res, next) => {
 		const hashedPassword = await bcrypt.hash(password, 12);
 		if (hashedPassword) {
 			const user = new User({
-				email: email,
+				email,
 				password: hashedPassword,
+				firstname, 
+				lastname, 
+				role
 			});
 			const result = await user.save();
-			res.status(201).json({
-				message: 'User created',
-				userId: result._id,
-			});
+			res.status(201).json({ message: 'success' });
 		}
 	} catch (err) {
 		if (!err.statusCode) {

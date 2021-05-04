@@ -21,6 +21,22 @@ export const logIn = (
   }
 };
 
+export const signUp = (
+  payload: any
+): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+  try {
+    dispatch({ type: actions.USER_SIGNUP_BEGIN });
+    await API_BASE_URL.post("/auth/signup", payload);
+    dispatch({ type: actions.USER_SIGNUP_SUCCESS });
+  } catch (e) {
+    dispatch({
+      type: actions.USER_SIGNUP_FAILURE,
+      payload: e.message
+    });
+    throw e;
+  }
+};
+
 export const logOut = () => ({
   type: actions.USER_LOGOUT
 });

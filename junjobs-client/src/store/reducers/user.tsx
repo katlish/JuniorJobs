@@ -10,7 +10,6 @@ const initialState: UserState = {
   loggedIn: false
 };
 
-// TODO: add signUP
 //FIXME: move logic with tokens outside
 const user = (state = initialState, action: AnyAction) => {
   switch (action.type) {
@@ -33,6 +32,26 @@ const user = (state = initialState, action: AnyAction) => {
       };
     }
     case actionTypes.USER_LOGIN_FAILURE: {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+        loggedIn: false,
+      };
+    }
+    case actionTypes.USER_SIGNUP_BEGIN:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case actionTypes.USER_SIGNUP_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        error: null,
+      };
+    }
+    case actionTypes.USER_SIGNUP_FAILURE: {
       return {
         ...state,
         isLoading: false,

@@ -7,9 +7,9 @@ import Auth from "./components/Auth";
 import JobsPage from './containers/JobsPage';
 import CandidatesPage from "./containers/CandidatesPage";
 import AddCandidatePage from "./containers/AddCandidatePage";
-import { logIn, logOut, setUserToken } from "./store/actions/user";
+import { logIn, signUp, logOut, setUserToken } from "./store/actions/user";
 import { addOrUpdateCandidate } from "./store/actions/candidates";
-import { LoginData, Candidate } from "./types";
+import { SignInData, Candidate } from "./types";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -41,7 +41,8 @@ const App = () => {
             {!user?.email ? (
               <Auth
                 show={true}
-                logIn={(userData: LoginData) => dispatch(logIn(userData))}
+                logIn={(userData: SignInData) => dispatch(logIn(userData))}
+                signUp={(userData: SignInData) => dispatch(signUp(userData))}
               />
             ) : (
               <Redirect to="/" />

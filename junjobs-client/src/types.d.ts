@@ -107,18 +107,26 @@ export interface Job {
 }
 
 
-export interface LoginData {
+export interface SignInData {
   email: string;
   password: string;
+  firstname: string;
+  lastname: string;
+  role: string;
 }
 
-export function logIn(data: LoginData): void {}
+
+export function logIn(data: SignInData): void {}
+export function signUp(): void {}
+
 
 export interface IAuthProps {
   show: boolean;
   logIn: logIn;
+  signUp: signUp;
 }
 
 export interface IAuthFormProps {
-  formik: FormikProps<LoginData>;
+  formik: FormikProps<SignInData>;
+  type: string;
 }
