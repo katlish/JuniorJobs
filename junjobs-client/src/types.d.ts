@@ -1,4 +1,5 @@
 import { FormikProps } from "formik";
+import { userRole } from "./store/constants/constants";
 
 export interface IHeaderProps {
   user: any;
@@ -28,6 +29,7 @@ export interface IMapProps {
 
 export interface IAddCandidatePageProps {
   email: string;
+  existingCandidate: Candidate | undefined;
   submitHandler: (candidate: Candidate) => void;
 }
 
@@ -53,6 +55,7 @@ export interface Country {
     ioc: string;
 }
 
+//FIXME: data any
 export interface UserState {
   isLoading: boolean;
   error: any;
@@ -112,7 +115,7 @@ export interface SignInData {
   password: string;
   firstname: string;
   lastname: string;
-  role: string;
+  role: userRole;
 }
 
 
@@ -130,3 +133,4 @@ export interface IAuthFormProps {
   formik: FormikProps<SignInData>;
   type: string;
 }
+

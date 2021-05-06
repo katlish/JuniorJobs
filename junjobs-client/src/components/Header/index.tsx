@@ -3,6 +3,7 @@ import { Navbar, Nav, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import classes from "./Header.module.css";
 import { IHeaderProps } from "../../types";
+import { userRole } from "../../store/constants/constants";
 
 const Header = ({ user, loggedIn, logout }: IHeaderProps) => {
 
@@ -30,9 +31,11 @@ const Header = ({ user, loggedIn, logout }: IHeaderProps) => {
             </Link>
           ) : (
             <>
-              <Link className="nav-link" to="/add-my-candidate">
-                ADD MY CANDIDATURE
-              </Link>
+              {user.role === userRole.CANDIDATE && (
+                <Link className="nav-link" to="/add-my-candidate">
+                  ADD MY CANDIDATURE
+                </Link>
+              )}
               
               <p className={`${classes.username} mx-3 my-auto`}>Hi, {user.email}</p>
               

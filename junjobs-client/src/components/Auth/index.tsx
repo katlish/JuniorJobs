@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import AuthForm from "./AuthForm";
 import { useHistory } from "react-router-dom";
 import { Modal, Button, Spinner } from "react-bootstrap";
-import { IAuthProps } from "../../types";
+import { IAuthProps } from "../../types"; 
+import {userRole}  from "../../store/constants/constants";
 
 export const validationSchema = Yup.object({
   email: Yup.string()
@@ -31,7 +32,7 @@ const Auth = ({ show = false, logIn, signUp }: IAuthProps) => {
       email: "",
       firstname: "",
       lastname: "",
-      role: "candidate",
+      role: userRole.CANDIDATE,
     },
     validationSchema,
     enableReinitialize: true,

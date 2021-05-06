@@ -6,23 +6,22 @@ import CountriesList from '../components/CoutriesList/CountriesList';
 import { IAddCandidatePageProps , Candidate, Country } from '../types';
 
 
-//FIXME: fill the form with already existing data in the db
-const AddCandidatePage = ({email, submitHandler}: IAddCandidatePageProps) => {
+const AddCandidatePage = ({email, existingCandidate, submitHandler}: IAddCandidatePageProps) => {
     const history = useHistory();
     
     const initialValues = {
         email,
-        name: '',
-        yearsOfExperience: 0,
+        name: existingCandidate?.name,
+        yearsOfExperience: existingCandidate?.yearsOfExperience,
         jobType: {
             fullstack: false,
             frontend: false,
             backend: false
         },
         location: null,
-        description: '',
-        url: '',
-        isremote: false
+        description: existingCandidate?.description,
+        url: existingCandidate?.url,
+        isremote: existingCandidate?.isremote
     }
 
     const formik = useFormik({

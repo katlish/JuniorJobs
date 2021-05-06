@@ -1,5 +1,6 @@
 import { Form , DropdownButton, Dropdown} from "react-bootstrap";
 import { IAuthFormProps } from "../../types";
+import { userRole } from "../../store/constants/constants";
 
 const AuthForm = ({ formik, type="login" }: IAuthFormProps) => {
   return (
@@ -80,10 +81,10 @@ const AuthForm = ({ formik, type="login" }: IAuthFormProps) => {
                 id="role"
                 
             >
-              <Dropdown.Item onClick={() => formik.setFieldValue("role", "candidate")}>
+              <Dropdown.Item onClick={() => formik.setFieldValue("role", userRole.CANDIDATE)}>
                 Candidate
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => formik.setFieldValue("role", "hr")}>
+              <Dropdown.Item onClick={() => formik.setFieldValue("role", userRole.HR)}>
                 HR
               </Dropdown.Item>
           </DropdownButton>
