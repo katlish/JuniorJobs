@@ -55,6 +55,10 @@ exports.login = async (req, res, next) => {
 				email: loggedinUser.email,
 				userId: loggedinUser._id.toString(),
 				role: loggedinUser.role,
+				jobs: loggedinUser.jobs,
+				candidates: loggedinUser.candidates,
+				firstname: loggedinUser.firstname,
+				lastname: loggedinUser.lastname
 			},
 			process.env.JWT_PRIVATE_KEY,
 			{ expiresIn: process.env.JWT_TIME_EXPIRATION },
@@ -64,6 +68,10 @@ exports.login = async (req, res, next) => {
 			email: loggedinUser.email,
 			userId: loggedinUser._id.toString(),
 			role: loggedinUser.role,
+			jobs: loggedinUser.jobs,
+			candidates: loggedinUser.candidates,
+			firstname: loggedinUser.firstname,
+			lastname: loggedinUser.lastname
 		});
 	} catch (err) {
 		if (!err.statusCode) {

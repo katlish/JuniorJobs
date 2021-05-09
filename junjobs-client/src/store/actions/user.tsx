@@ -48,3 +48,8 @@ export const setUserToken = (token: string) => ({
     data: { ...jwt_decode<JwtPayload>(token) }
   }
 });
+
+export const setUserJobs = (jobs: string[]) => ({
+  type: actions.USER_SET_JOBS_ARR,
+  payload: jobs
+});

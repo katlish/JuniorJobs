@@ -82,6 +82,11 @@ const user = (state = initialState, action: AnyAction) => {
         ...state,
         error: null
       };
+    case actionTypes.USER_SET_JOBS_ARR:
+      return {
+        ...state,
+        data: {...state.data, jobs: action.payload}
+      };
     default:
       return state;
   }

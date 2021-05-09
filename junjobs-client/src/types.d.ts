@@ -1,22 +1,37 @@
 import { FormikProps } from "formik";
 import { userRole } from "./store/constants/constants";
 
+//FIXME: user any
 export interface IHeaderProps {
   user: any;
   loggedIn: any;
   logout: any;
 }
 
+export interface IJobsPageProps {
+  addJob: any;
+}
+
+//FIXME: add remove any
 export interface IJobsListProps {
   jobs: Job[];
+  withAdd: boolean;
+  checkedJobs: string[];
+  addJob: any;
+  removeJob: any;
 }
 
 export interface ICandidatesListProps {
   candidates: Candidate[];
 }
 
+//FIXME: add remove any
 export interface IJobProps {
   job: Job;
+  withAdd: boolean;
+  isChecked: boolean;
+  addJob: any;
+  removeJob: any;
 }
 
 export interface ICandidateProps {
@@ -95,7 +110,7 @@ export interface Candidate {
 
 
 export interface Job {
-  _id: string;
+  externalId: string;
   type: string;
   url: string;
   createdAt: string;
