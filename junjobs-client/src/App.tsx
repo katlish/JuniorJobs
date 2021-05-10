@@ -7,7 +7,7 @@ import Auth from "./components/Auth";
 import JobsPage from './containers/JobsPage';
 import CandidatesPage from "./containers/CandidatesPage";
 import AddCandidatePage from "./containers/AddCandidatePage";
-import { logIn, signUp, logOut, setUserToken, setUserJobs } from "./store/actions/user";
+import { logIn, signUp, logOut, setUserToken } from "./store/actions/user";
 import { fetchCandidates, addOrUpdateCandidate } from "./store/actions/candidates";
 import { SignInData, Candidate } from "./types";
 import { userRole } from "./store/constants/constants";
@@ -36,7 +36,7 @@ const App = () => {
       <Container>
         <Switch>
           <Route path="/" exact>
-            <JobsPage addJob={(items: string[]) => dispatch(setUserJobs(items))}/>
+            <JobsPage />
           </Route>
           <Route path="/candidates" exact>
             <CandidatesPage />

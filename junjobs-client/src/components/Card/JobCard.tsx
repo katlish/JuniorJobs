@@ -19,7 +19,7 @@ const JobCard = ({ job, withAdd, isChecked, addJob, removeJob }: IJobProps) => {
 
   return (
     <>
-      <Card  className={`${classes.Mycard} d-flex m-3 text-left shadow-sm`}>
+      <Card key={job.externalId} className={`${classes.Mycard} d-flex m-3 text-left shadow-sm`}>
         <Card.Header className="d-flex align-items-center">
           <OverlayTrigger
             placement="bottom"
@@ -29,7 +29,7 @@ const JobCard = ({ job, withAdd, isChecked, addJob, removeJob }: IJobProps) => {
             <Card.Title className={`${classes.Title} text-info mb-0`}>{job.title}</Card.Title>
           </OverlayTrigger>
           {withAdd && (<div className="ml-auto">
-                        <input type="checkbox" id={job.externalId} name="Add" onChange={addItem}/>
+                        <input type="checkbox" id={job.externalId} name="Add" onChange={addItem} checked={isChecked}/>
                       </div>)
           }
           

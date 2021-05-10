@@ -1,16 +1,17 @@
 import React, {useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Spinner, Form } from "react-bootstrap";
+import { setUserJob, removeUserJob } from "../store/actions/user";
 import { fetchJobs, toggleIsRemote, setCountry } from "../store/actions/jobs";
 import { filterJobs } from '../store/selectors/jobs';
-import { IJobsPageProps, Country } from "../types";
+import { Country } from "../types";
 import JobsList from "../components/JobsList/JobsList";
 import Pagination from "../components/Pagination/Pagination";
 import { PAGINATION_ITEMS_PER_PAGE, PAGINATION_PAGES_PER_BLOCK, userRole } from "../store/constants/constants";
 import CountriesList from "../components/CoutriesList/CountriesList";
 
 
-const JobsPage = ({addJob}: IJobsPageProps) => {
+const JobsPage = () => {
   const user = useSelector((state: any) => state.user.data);
   const visibleJobs = useSelector(filterJobs);
   const isLoading = useSelector((state: any) => state.jobs.isLoading);
@@ -20,39 +21,9 @@ const JobsPage = ({addJob}: IJobsPageProps) => {
 
   const dispatch = useDispatch();
 
-  //checked jobs
-  const [checkedItems, setCheckedItems] = useState<Array<string>>([]);
-
-  const pushChecked = (item: string) => {
-    console.log({user});
-    debugger;
-    const items = checkedItems;
-    items.push(item);
-    setCheckedItems(items);
-    addJob(checkedItems);
-  }
-
-  const popChecked = (item: string) => {
-    if (item){
-      const items = checkedItems;
-      const index = items.indexOf(item);
-      if (index > -1) {
-        items.splice(index, 1);
-        setCheckedItems(items);
-        addJob(checkedItems);
-      }
-    }
-  }
-
-
   useEffect(() => {
     dispatch(fetchJobs());
-    console.log("USERRRRRR-", user.jobs);
-    if (user) {
-      setCheckedItems(user.jobs);
-    }
   }, []);
-
 
   const onSwitchChange = () => {
     dispatch(toggleIsRemote());
@@ -77,7 +48,6 @@ const JobsPage = ({addJob}: IJobsPageProps) => {
   const paginate = (curPage: number) => setCurrentPage(curPage);
 
 
-  console.log({checkedItems});
   return (
     <div className="py-4">
 
@@ -106,9 +76,9 @@ const JobsPage = ({addJob}: IJobsPageProps) => {
       <JobsList 
         jobs={currentJobsOnPage} 
         withAdd={user?.role === userRole.CANDIDATE} 
-        checkedJobs={checkedItems} 
-        addJob={pushChecked} 
-        removeJob={popChecked}
+        checkedJobs={user?.jobs} 
+        addJob={(job: string) => dispatch(setUserJob(job, user?.jobs))} 
+        removeJob={(job: string) => dispatch(removeUserJob(job, user?.jobs))}
       />
       <h3 className="text-left mb-4">{error && `Error: ${error}`}</h3>
     </div>

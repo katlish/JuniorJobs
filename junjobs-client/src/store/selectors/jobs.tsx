@@ -11,11 +11,11 @@ export const filterJobs = createSelector(getJobs, getCountry, getIsRemote, (jobs
 	let filteredJobs: Job [] = [...jobs];
 
 	if (country){
-		filteredJobs = filteredJobs.filter((job : Job) => job.location.toLowerCase().includes(country.name.toLowerCase()));
+		filteredJobs = jobs.filter((job : Job) => job.location.toLowerCase().includes(country.name.toLowerCase()));
 	}
 
 	if (isRemote){
-		filteredJobs = jobs.filter((job : Job) => job.isremote === true);
+		filteredJobs = filteredJobs.filter((job : Job) => job.isremote === true);
 	}
 	return filteredJobs;
 });

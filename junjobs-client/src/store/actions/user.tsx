@@ -49,7 +49,32 @@ export const setUserToken = (token: string) => ({
   }
 });
 
-export const setUserJobs = (jobs: string[]) => ({
-  type: actions.USER_SET_JOBS_ARR,
-  payload: jobs
-});
+export const setUserJob = (job: string, userCurrentJobs: string[]) => {
+  if (job){
+    const items = userCurrentJobs;
+    const index = items.indexOf(job);
+    if (index === -1) {
+      items.push(job);
+      return ({
+        type: actions.USER_SET_JOBS_ARR,
+        payload: items
+      })
+    }
+  }
+  return;
+};
+
+export const removeUserJob = (job: string, userCurrentJobs: string[]) => {
+  if (job){
+    const items = userCurrentJobs;
+    const index = items.indexOf(job);
+    if (index > -1) {
+      items.splice(index, 1);
+      return ({
+        type: actions.USER_SET_JOBS_ARR,
+        payload: items
+      })
+    }
+  }
+  return;
+};

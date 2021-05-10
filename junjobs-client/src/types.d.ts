@@ -8,9 +8,6 @@ export interface IHeaderProps {
   logout: any;
 }
 
-export interface IJobsPageProps {
-  addJob: any;
-}
 
 //FIXME: add remove any
 export interface IJobsListProps {
