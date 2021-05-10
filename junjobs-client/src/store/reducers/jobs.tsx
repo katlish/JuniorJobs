@@ -7,7 +7,8 @@ const initialState: JobsState = {
   error: null,
   data: [],
   isRemote: true,
-  country: null
+  country: null,
+  isFavourite: false
 };
 
 const jobs = (state = initialState, action: AnyAction) => {
@@ -36,6 +37,12 @@ const jobs = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         isRemote: !state.isRemote
+      };
+    }
+    case actionTypes.JOBS_IS_FAVOURITE_TOGGLE: {
+      return {
+        ...state,
+        isFavourite: !state.isFavourite
       };
     }
     case actionTypes.JOBS_SET_COUNTRY: {

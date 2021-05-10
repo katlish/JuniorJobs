@@ -1,8 +1,8 @@
-import React, {useState, useEffect } from "react";
+import {useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Spinner, Form } from "react-bootstrap";
+import { Spinner, Form, Button } from "react-bootstrap";
 import { setUserJob, removeUserJob } from "../store/actions/user";
-import { fetchJobs, toggleIsRemote, setCountry } from "../store/actions/jobs";
+import { fetchJobs, toggleIsRemote, toggleIsFavourite, setCountry } from "../store/actions/jobs";
 import { filterJobs } from '../store/selectors/jobs';
 import { Country } from "../types";
 import JobsList from "../components/JobsList/JobsList";
@@ -12,12 +12,14 @@ import CountriesList from "../components/CoutriesList/CountriesList";
 
 
 const JobsPage = () => {
-  const user = useSelector((state: any) => state.user.data);
   const visibleJobs = useSelector(filterJobs);
   const isLoading = useSelector((state: any) => state.jobs.isLoading);
   const isRemote = useSelector((state: any) => state.jobs.isRemote);
+  const isFavourite = useSelector((state: any) => state.jobs.isFavourite);
   const country = useSelector((state: any) => state.jobs.country);
   const error = useSelector((state: any) => state.jobs.error);
+  const userFavourites = useSelector((state: any) => state.user.data?.jobs);
+  const role = useSelector((state: any) => state.user.data?.role);
 
   const dispatch = useDispatch();
 
@@ -30,6 +32,12 @@ const JobsPage = () => {
     paginate(1);
   };
 
+  const onFavouritesChange = () => {
+    dispatch(toggleIsFavourite());
+    paginate(1);
+  };
+  
+ 
   // coutry list
   const onCountryChange = (country: Country | null) => {
     dispatch(setCountry(country))
@@ -47,10 +55,12 @@ const JobsPage = () => {
 
   const paginate = (curPage: number) => setCurrentPage(curPage);
 
-
+ 
   return (
     <div className="py-4">
-
+      <Button className="d-flex flex-row justify-content-center m-auto" variant="info" onClick={onFavouritesChange}>
+          {isFavourite ? "BACK TO ALL JOBS" : "MY SELECTED JOBS"}
+      </Button>
       <CountriesList country={country} setCountry={onCountryChange}/>
 
       <Pagination totalItems={visibleJobs.length}
@@ -70,15 +80,16 @@ const JobsPage = () => {
         />
       </Form>
       <p className="text-center">
-        {visibleJobs?.length} Entry Level Software Jobs Found
+        {visibleJobs?.length}
+        {isFavourite ? " Selected Software Jobs Found" : " Entry Level Software Jobs Found"} 
         {isLoading && <Spinner as="span" variant="info" animation="border" />}
       </p>
       <JobsList 
         jobs={currentJobsOnPage} 
-        withAdd={user?.role === userRole.CANDIDATE} 
-        checkedJobs={user?.jobs} 
-        addJob={(job: string) => dispatch(setUserJob(job, user?.jobs))} 
-        removeJob={(job: string) => dispatch(removeUserJob(job, user?.jobs))}
+        withAdd={role === userRole.CANDIDATE} 
+        checkedJobs={userFavourites} 
+        addJob={(job: string) => dispatch(setUserJob(job, userFavourites))} 
+        removeJob={(job: string) => dispatch(removeUserJob(job, userFavourites))}
       />
       <h3 className="text-left mb-4">{error && `Error: ${error}`}</h3>
     </div>

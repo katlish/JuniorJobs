@@ -27,6 +27,9 @@ export const toggleIsRemote = () => ({
 	type: actions.JOBS_IS_REMOTE_TOGGLE
 });
 
+export const toggleIsFavourite = () => ({
+	type: actions.JOBS_IS_FAVOURITE_TOGGLE
+});
 
 export const setCountry = (country: Country | null) => ({
 	type: actions.JOBS_SET_COUNTRY,

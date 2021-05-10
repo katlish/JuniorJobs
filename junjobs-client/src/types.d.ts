@@ -81,6 +81,7 @@ export interface JobsState {
   data: Job[];
   isRemote: boolean;
   country: Country | null;
+  isFavourite: boolean;
 }
 
 export interface CandidatesState {
