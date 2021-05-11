@@ -37,8 +37,6 @@ const JobsPage = () => {
     paginate(1);
   };
   
- 
-  // coutry list
   const onCountryChange = (country: Country | null) => {
     dispatch(setCountry(country))
     paginate(1);
