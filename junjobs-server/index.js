@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 // routes
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 const jobsRoutes = require('./routes/jobs');
 const candidatesRoutes = require('./routes/candidates');
 
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
 app.use('/jobs', jobsRoutes);
 app.use('/candidates', candidatesRoutes);
 

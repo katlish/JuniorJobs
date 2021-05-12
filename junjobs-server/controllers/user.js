@@ -1,10 +1,9 @@
 const User = require('../models/user');
 
-//TODO: find by email with isAuth
 exports.get = async (req, res, next) => {
 	try {
-		const user = await User.find(email);
-		res.status(200).json(user);
+		const {role, jobs, candidates, email} = await User.findOne({_id: req.user.userId});
+		res.status(200).json({role, jobs, candidates, email});
 	} catch (err) {
 		if (!err.statusCode) {
 			err.statusCode = 500;
