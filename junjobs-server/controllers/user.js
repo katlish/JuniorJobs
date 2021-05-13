@@ -13,21 +13,15 @@ exports.get = async (req, res, next) => {
 };
 
 //TODO: update with new jobs arr
-exports.createOrUpdate = async (req, res, next) => {
+exports.update = async (req, res, next) => {
 	try {
-		const filter = { email: req.body.email };
+		const filter = { _id: req.user.userId };
 
-		// await Job.countDocuments(filter, function (err, count) {
-		// 	console.log('there are %d matches', count)}); 
-
-		let dbres = await User.findOneAndUpdate(filter, req.body, {
-			new: true,
-			upsert: true,
-			rawResult: true // Return the raw result from the MongoDB driver
+		let dbres = await User.updateOne(filter, req.body, {
+			upsert: false
 		});
 
-		// console.log("updatedExisting - ", dbres.lastErrorObject.updatedExisting);
-		res.status(201).json(dbres.value);
+		res.status(201).json({ message: 'success' });
 
 		} catch (err) {
 			if (!err.statusCode) {

@@ -78,3 +78,17 @@ export const removeUserJob = (job: string, userCurrentJobs: string[]) => {
   }
   return;
 };
+
+export const updateUserJobs = (jobs: string[]): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+  try {
+    dispatch({ type: actions.USER_UPDATE_JOBS_BEGIN });
+    await API_BASE_URL.post("/user", jobs);
+    dispatch({ type: actions.USER_UPDATE_JOBS_SUCCESS});
+  } catch (e) {
+    dispatch({
+      type: actions.USER_UPDATE_JOBS_FAILURE,
+      payload: e.message
+    });
+    throw e;
+  }
+};

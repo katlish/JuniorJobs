@@ -24,13 +24,13 @@ const userSchema = new Schema({
 	},
 	jobs: [
 		{
-			type: Schema.Types.ObjectId,
+			type: String,
 			ref: 'Job',
 		},
 	],
 	candidates: [
 		{
-			type: Schema.Types.ObjectId,
+			type: String,
 			ref: 'Candidate',
 		},
 	],
