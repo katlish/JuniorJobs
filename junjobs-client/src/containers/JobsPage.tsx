@@ -1,7 +1,7 @@
 import {useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Spinner, Form, Button } from "react-bootstrap";
-import { setUserJob, removeUserJob } from "../store/actions/user";
+import { setUserJob, removeUserJob, updateUserJobs } from "../store/actions/user";
 import { fetchJobs, toggleIsRemote, toggleIsFavourite, setCountry } from "../store/actions/jobs";
 import { filterJobs } from '../store/selectors/jobs';
 import { Country } from "../types";
@@ -13,14 +13,16 @@ import CountriesList from "../components/CoutriesList/CountriesList";
 
 const JobsPage = () => {
   const visibleJobs = useSelector(filterJobs);
-  const isLoading = useSelector((state: any) => state.jobs.isLoading);
+  const isJobsLoading = useSelector((state: any) => state.jobs.isLoading);
   const isRemote = useSelector((state: any) => state.jobs.isRemote);
   const isFavourite = useSelector((state: any) => state.jobs.isFavourite);
   const country = useSelector((state: any) => state.jobs.country);
-  const error = useSelector((state: any) => state.jobs.error);
+  const jobsError = useSelector((state: any) => state.jobs.error);
   const userFavourites = useSelector((state: any) => state.user.data?.jobs);
   const role = useSelector((state: any) => state.user.data?.role);
-
+  const isUserLoading = useSelector((state: any) => state.user.isLoading);
+  const userError = useSelector((state: any) => state.user.error);
+  
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,7 +38,11 @@ const JobsPage = () => {
     dispatch(toggleIsFavourite());
     paginate(1);
   };
-  
+
+  const onSaveChange = () => {
+    dispatch(updateUserJobs(userFavourites));
+  };
+
   const onCountryChange = (country: Country | null) => {
     dispatch(setCountry(country))
     paginate(1);
@@ -59,6 +65,14 @@ const JobsPage = () => {
       <Button className="d-flex flex-row justify-content-center m-auto" variant="info" onClick={onFavouritesChange}>
           {isFavourite ? "BACK TO ALL JOBS" : "MY SELECTED JOBS"}
       </Button>
+      {(isFavourite && userFavourites.length) && <div className="d-flex flex-column justify-content-center mx-auto my-3">
+          
+          <Button className="d-flex flex-row m-auto p-auto" variant="info" onClick={onSaveChange}>
+            <div className="m-auto">SAVE SELECTED JOBS FOR FUTURE</div>
+            {isUserLoading && <Spinner animation="border" className="ml-2"/>}
+          </Button>
+          <h3 >{userError && `Error: ${userError}`}</h3>
+        </div> }
       <CountriesList country={country} setCountry={onCountryChange}/>
 
       <Pagination totalItems={visibleJobs.length}
@@ -80,7 +94,7 @@ const JobsPage = () => {
       <p className="text-center">
         {visibleJobs?.length}
         {isFavourite ? " Selected Software Jobs Found" : " Entry Level Software Jobs Found"} 
-        {isLoading && <Spinner as="span" variant="info" animation="border" />}
+        {isJobsLoading && <Spinner as="span" variant="info" animation="border" />}
       </p>
       <JobsList 
         jobs={currentJobsOnPage} 
@@ -89,7 +103,7 @@ const JobsPage = () => {
         addJob={(job: string) => dispatch(setUserJob(job, userFavourites))} 
         removeJob={(job: string) => dispatch(removeUserJob(job, userFavourites))}
       />
-      <h3 className="text-left mb-4">{error && `Error: ${error}`}</h3>
+      <h3 className="text-left mb-4">{jobsError && `Error: ${jobsError}`}</h3>
     </div>
   );
 };

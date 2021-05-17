@@ -7,7 +7,7 @@ import Auth from "./components/Auth";
 import JobsPage from './containers/JobsPage';
 import CandidatesPage from "./containers/CandidatesPage";
 import AddCandidatePage from "./containers/AddCandidatePage";
-import { logIn, signUp, logOut, setUserToken } from "./store/actions/user";
+import { logIn, signUp, logOut, setUserToken, getUserJobs } from "./store/actions/user";
 import { fetchCandidates, addOrUpdateCandidate } from "./store/actions/candidates";
 import { SignInData, Candidate } from "./types";
 import { userRole } from "./store/constants/constants";
@@ -24,6 +24,7 @@ const App = () => {
 		if (token) {
 			dispatch(setUserToken(token));
       dispatch(fetchCandidates());
+      dispatch(getUserJobs());
 		}
 	}, []);
 

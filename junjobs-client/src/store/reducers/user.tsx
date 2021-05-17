@@ -4,7 +4,7 @@ import { API_BASE_URL } from "../../API/";
 import { UserState } from "../../types";
 
 const initialState: UserState = {
-  isLoading: true,
+  isLoading: false,
   error: null,
   data: {},
   loggedIn: false
@@ -57,6 +57,46 @@ const user = (state = initialState, action: AnyAction) => {
         isLoading: false,
         error: action.payload,
         loggedIn: false,
+      };
+    }
+    case actionTypes.USER_UPDATE_JOBS_BEGIN:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    case actionTypes.USER_UPDATE_JOBS_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        error: null,
+      };
+    }
+    case actionTypes.USER_UPDATE_JOBS_FAILURE: {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload
+      };
+    }
+    case actionTypes.USER_GET_JOBS_BEGIN:
+      return {
+        ...state,
+        isLoading: true,
+        error: null,
+      };
+    case actionTypes.USER_GET_JOBS_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        error: null,
+      };
+    }
+    case actionTypes.USER_GET_JOBS_FAILURE: {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload
       };
     }
     case actionTypes.USER_SET_TOKEN: {
