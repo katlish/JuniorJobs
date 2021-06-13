@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import { Modal, Button, Spinner } from "react-bootstrap";
 import { IAuthProps } from "../../types"; 
 import {userRole}  from "../../store/constants/constants";
+import "./Auth.css";
 
 export const validationSchema = Yup.object({
   email: Yup.string()
@@ -21,8 +22,8 @@ export const validationSchema = Yup.object({
   role: Yup.string()
 });
 
-const Auth = ({ show = false, logIn, signUp }: IAuthProps) => {
-	const [type, setType] = useState('signup');
+const Auth = ({ show = false, logIn, signUp, type = 'login' }: IAuthProps) => {
+	const [authType, setType] = useState(type);
 
   const history = useHistory();
 
@@ -40,14 +41,14 @@ const Auth = ({ show = false, logIn, signUp }: IAuthProps) => {
       console.log({values});
       setStatus(null);
       try {
-        if (type === 'signup') {
+        if (authType === 'signup') {
 					await signUp(values);
           setStatus({
             type: 'success',
             text: 'Success! Now you can Log In.',
           });
 				} 
-				if (type === 'login') {
+				if (authType === 'login') {
 					await logIn(values);
           history.push("/");
 				} 
@@ -62,18 +63,26 @@ const Auth = ({ show = false, logIn, signUp }: IAuthProps) => {
   });
 
   const changeType = () => {
-		setType(type === 'signup' ? 'login' : 'signup');
+		setType(authType === 'signup' ? 'login' : 'signup');
 		formik.resetForm();
 	};
 
   return (
     <Modal show={show} onHide={() => history.push("/")} centered>
       <Modal.Header closeButton>
-        <Modal.Title>{type === 'signup' ? 'Sign Up' : 'Log In'}</Modal.Title>
+        <Modal.Title>{authType === 'signup' ? 'Sign Up' : 'Log In'}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <AuthForm formik={formik} type={type}/>
-        {type === 'signup' ? (
+        <AuthForm formik={formik} type={authType}/>
+        
+        {formik.status && (
+          <div className={`text-${formik.status.type}`}>
+            {formik.status.text}
+          </div>
+        )}
+      </Modal.Body>
+      <Modal.Footer className="d-flex justify-content-between">
+        {authType === 'signup' ? (
 					<div>
 						Already have an account?{' '}
 						<Button as="a" bsPrefix="unset" onClick={changeType}>
@@ -82,19 +91,13 @@ const Auth = ({ show = false, logIn, signUp }: IAuthProps) => {
 					</div>
 				) : (
 					<div>
-						Back to{' '}
+						Don't have an account?{' '}
 						<Button as="a" bsPrefix="unset" onClick={changeType}>
 							Signup
 						</Button>
 					</div>
 				)}
-        {formik.status && (
-          <div className={`text-${formik.status.type}`}>
-            {formik.status.text}
-          </div>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
+
         {formik.isSubmitting && (
           <Spinner variant="info" animation="border" as="span" />
         )}
@@ -103,7 +106,7 @@ const Auth = ({ show = false, logIn, signUp }: IAuthProps) => {
           onClick={() => formik.handleSubmit()}
           disabled={formik.isSubmitting}
         >
-          {type === 'signup' ? 'Sign Up' : 'Log In'}
+          {authType === 'signup' ? 'Sign Up' : 'Log In'}
         </Button>
       </Modal.Footer>
     </Modal>

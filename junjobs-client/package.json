@@ -14,6 +14,7 @@
     "bootstrap": "^4.6.0",
     "formik": "^2.2.6",
     "jwt-decode": "^3.1.2",
+    "mdb-react-ui-kit": "*",
     "react": "^17.0.2",
     "react-bootstrap": "^1.5.2",
     "react-bootstrap-country-select": "^0.7.12",

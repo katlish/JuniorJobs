@@ -1,7 +1,7 @@
 import { Pagination } from "react-bootstrap";
 import { whichBlockPages } from "./utils/utilsPagination";
 import { IPaginationProps } from "../../types";
-
+import "./Pagination.css";
 
 const Paginaion = ({totalItems,
         itemsPerPage,

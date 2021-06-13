@@ -1,0 +1,21 @@
+.page-link {
+    background-color: #B23CFD;
+    border-radius: 50%;        
+    margin: 0 8px;
+    width: 2.5em;
+    height: 2.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.page-item.active .page-link{
+    background-color: #8a11d6ba;
+}
+
+.page-item:first-child,
+.page-item:last-child,
+.page-item:first-child .page-link,
+.page-item:last-child .page-link  {
+    border-radius: 50%;        
+}

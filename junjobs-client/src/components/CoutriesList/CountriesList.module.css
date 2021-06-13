@@ -1,0 +1,7 @@
+.CountriesList {
+    width: fit-content;
+}
+
+.CountriesList li{
+    width: inherit;
+}

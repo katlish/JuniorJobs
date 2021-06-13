@@ -5,7 +5,7 @@ import classes from "./Header.module.css";
 import { IHeaderProps } from "../../types";
 import { userRole } from "../../store/constants/constants";
 
-const Header = ({ user, loggedIn, logout }: IHeaderProps) => {
+const Header = ({ user, loggedIn, logout }: any) => {
 
   return (
     <Navbar bg="dark" variant="dark" sticky="top" expand="lg">

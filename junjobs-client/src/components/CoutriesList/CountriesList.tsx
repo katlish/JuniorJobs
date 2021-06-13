@@ -1,12 +1,14 @@
 import CountrySelect from "react-bootstrap-country-select";
 import { ICountriesProps } from "../../types";
+import classes from "./CountriesList.module.css";
 
 const CountriesList = ({country, setCountry}: ICountriesProps ) => {
     return (
-    <CountrySelect className="my-4"
+    <CountrySelect 
+        className={`${classes.CountriesList} my-4`}
         value={country}
         onChange={setCountry}
-        flush={false}
+        flush={true}
     />
     );
 }

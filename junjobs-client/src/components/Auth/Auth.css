@@ -1,0 +1,35 @@
+.modal-content {
+    background-color: rgba(255, 255, 255, .15);  
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    color: white;
+}
+.invalid-feedback {
+    position: relative;
+}
+
+.close {
+    color: white;
+    opacity: 0.9;
+}
+
+.close:hover {
+    color: white;
+    opacity: 0.1;
+}
+
+.form-label {
+    color: white;
+}
+
+.btn-dark {
+    min-width: 10rem;
+}
+
+.modal-header{
+    border-bottom: 0;
+}
+
+.modal-footer {
+    border-top: 0;
+}

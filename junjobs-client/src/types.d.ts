@@ -1,11 +1,15 @@
 import { FormikProps } from "formik";
 import { userRole } from "./store/constants/constants";
 
+export interface INavBarProps {
+  user: any;
+  loggedIn: any;
+  logout: any;
+}
 //FIXME: user any
 export interface IHeaderProps {
   user: any;
   loggedIn: any;
-  logout: any;
 }
 
 
@@ -140,6 +144,7 @@ export interface IAuthProps {
   show: boolean;
   logIn: logIn;
   signUp: signUp;
+  type: string;
 }
 
 export interface IAuthFormProps {

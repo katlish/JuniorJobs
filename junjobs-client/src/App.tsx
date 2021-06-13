@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { MDBContainer } from 'mdb-react-ui-kit';
 import { Container } from "react-bootstrap";
 import { Redirect, Route, Switch } from "react-router-dom";
-import Header from "./components/Header";
+import NavBarMDB from "./components/NavBar/NavBar";
+import HeaderMDB from "./components/Header/HeaderMDB";
 import Auth from "./components/Auth";
 import JobsPage from './containers/JobsPage';
 import CandidatesPage from "./containers/CandidatesPage";
@@ -29,12 +31,15 @@ const App = () => {
 	}, []);
 
   return (
-    <div>
-      <Header 
+    <div style={{background: "#191918"}}>
+      <NavBarMDB 
         loggedIn={loggedIn}
-				user={user}
-				logout={() => dispatch(logOut())} />
-      <Container>
+        user={user}
+        logout={() => dispatch(logOut())}/>
+      <HeaderMDB 
+              loggedIn={loggedIn}
+              user={user}/>
+      <MDBContainer fluid className='m-0 p-0'>
         <Switch>
           <Route path="/" exact>
             <JobsPage />
@@ -48,6 +53,19 @@ const App = () => {
                 show={true}
                 logIn={(userData: SignInData) => dispatch(logIn(userData))}
                 signUp={(userData: SignInData) => dispatch(signUp(userData))}
+                type='signup'
+              />
+            ) : (
+              <Redirect to="/" />
+            )}
+          </Route>
+          <Route path="/login" exact>
+            {!user?.email ? (
+              <Auth
+                show={true}
+                logIn={(userData: SignInData) => dispatch(logIn(userData))}
+                signUp={(userData: SignInData) => dispatch(signUp(userData))}
+                type='login'
               />
             ) : (
               <Redirect to="/" />
@@ -65,7 +83,7 @@ const App = () => {
             )}
           </Route>
         </Switch>
-      </Container>
+      </MDBContainer>
     </div>
   );
 };

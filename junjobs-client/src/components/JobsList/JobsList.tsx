@@ -1,22 +1,29 @@
-import JobCard from "../Card/JobCard";
+import JobCardDark from "../Card/JobCardDark";
 import { IJobsListProps } from "../../types";
 
 const JobsList = ({ jobs, withAdd, checkedJobs, addJob, removeJob }: IJobsListProps) => {
   if (!jobs.length) return null;
   return (
-    <div className="d-flex flex-wrap justify-content-md-center">
-      {jobs.map((job, i) => {
-            return <JobCard 
-              job={job} 
-              key={job.externalId} 
-              isChecked={isChecked(checkedJobs, job.externalId)} 
-              withAdd={withAdd} 
-              addJob={addJob} 
-              removeJob={removeJob}
-            />
-            })
+    <section className="container">
+      <div className="row gx-5 m-auto">
+      {
+        jobs.map((job) => {
+              return (
+                <div className="col-xl-4 col-lg-6 col-sm-12 mb-4 d-flex justify-content-center">
+                  <JobCardDark 
+                    job={job} 
+                    key={job.externalId} 
+                    isChecked={isChecked(checkedJobs, job.externalId)} 
+                    withAdd={withAdd} 
+                    addJob={addJob} 
+                    removeJob={removeJob}
+                  />
+                </div>
+              )
+        })
       }
-    </div>
+      </div>
+    </section>
   );
 };
 

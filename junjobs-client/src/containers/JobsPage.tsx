@@ -61,19 +61,46 @@ const JobsPage = () => {
 
  
   return (
-    <div className="py-4">
-      <Button className="d-flex flex-row justify-content-center m-auto" variant="info" onClick={onFavouritesChange}>
-          {isFavourite ? "BACK TO ALL JOBS" : "MY SELECTED JOBS"}
-      </Button>
-      {(isFavourite && userFavourites.length) && <div className="d-flex flex-column justify-content-center mx-auto my-3">
-          
-          <Button className="d-flex flex-row m-auto p-auto" variant="info" onClick={onSaveChange}>
-            <div className="m-auto">SAVE SELECTED JOBS FOR FUTURE</div>
-            {isUserLoading && <Spinner animation="border" className="ml-2"/>}
+    <div className="text-white-50">
+      {role && <>
+          <Button className="d-flex flex-row justify-content-center m-auto" variant="info" onClick={onFavouritesChange}>
+              {isFavourite ? "BACK TO ALL JOBS" : "MY SELECTED JOBS"}
           </Button>
-          <h3 >{userError && `Error: ${userError}`}</h3>
-        </div> }
-      <CountriesList country={country} setCountry={onCountryChange}/>
+          {(isFavourite && userFavourites?.length) && <div className="d-flex flex-column justify-content-center mx-auto my-3">
+              
+              <Button className="d-flex flex-row m-auto p-auto" variant="info" onClick={onSaveChange}>
+                <div className="m-auto">UPDATE MY JOB LIST</div>
+                {isUserLoading && <Spinner animation="border" className="ml-2"/>}
+              </Button>
+              <h3 >{userError && `Error: ${userError}`}</h3>
+            </div> 
+          }
+      </>}
+
+      <div className="container-fluid d-flex flex-wrap justify-content-around my-4 text-white-50">
+        <Form className="text-center my-4">
+          <Form.Check 
+            type="switch"
+            id="custom-switch"
+            label="Remote jobs only"
+            onChange={onSwitchChange}
+            checked={isRemote}
+          />
+        </Form>
+
+        <div className="d-flex align-items-center justify-content-center">
+          <div className="form-check form-check-inline">
+            <input className="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1"/>
+            <label className="form-check-label" >FrontEnd</label>
+          </div>
+          <div className="form-check form-check-inline">
+            <input className="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2"/>
+            <label className="form-check-label" >BackEnd</label>
+          </div>
+        </div>  
+        
+        <CountriesList country={country} setCountry={onCountryChange}/>
+      </div>
 
       <Pagination totalItems={visibleJobs.length}
           itemsPerPage={jobsPerPage}
@@ -82,15 +109,7 @@ const JobsPage = () => {
           pagesPerBlock={pagesPerBlock}
       />
 
-      <Form className="text-center my-4">
-        <Form.Check 
-          type="switch"
-          id="custom-switch"
-          label="Remote jobs only"
-          onChange={onSwitchChange}
-          checked={isRemote}
-        />
-      </Form>
+      
       <p className="text-center">
         {visibleJobs?.length}
         {isFavourite ? " Selected Software Jobs Found" : " Entry Level Software Jobs Found"} 
