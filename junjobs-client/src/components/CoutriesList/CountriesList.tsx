@@ -5,7 +5,7 @@ import classes from "./CountriesList.module.css";
 const CountriesList = ({country, setCountry}: ICountriesProps ) => {
     return (
     <CountrySelect 
-        className={`${classes.CountriesList} my-4`}
+        className={classes.CountriesList}
         value={country}
         onChange={setCountry}
         flush={true}

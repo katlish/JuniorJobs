@@ -21,10 +21,10 @@ const NavBarMDB = ({ user, loggedIn, logout }: INavBarProps) => {
         <MDBContainer fluid>
           <MDBNavbarBrand href='/'>JUNIOR JOBS</MDBNavbarBrand>
           <MDBNavbarToggler
-          aria-controls='navbarSupportedContent'
-          aria-expanded='false'
-          aria-label='Toggle navigation'
-          onClick={() => setShowBasic(!showBasic)}
+            aria-controls='navbarSupportedContent'
+            aria-expanded='false'
+            aria-label='Toggle navigation'
+            onClick={() => setShowBasic(!showBasic)}
           >
             <MDBIcon icon='bars' fas />
           </MDBNavbarToggler>
@@ -45,17 +45,11 @@ const NavBarMDB = ({ user, loggedIn, logout }: INavBarProps) => {
                   LOG IN
                 </Link>
               ) : (
-                <>
-                  {user.role === userRole.CANDIDATE && (
-                    <Link className="nav-link text-nowrap" to="/add-my-candidate">
-                      ADD MY CANDIDATURE
-                    </Link>
-                  )}
-                  
-                  <MDBBtn color='link' onClick={logout} className="text-nowrap">
-                    LOG OUT
-                  </MDBBtn>
-                </>
+                  <div>
+                    <MDBBtn color='light' onClick={logout} className="text-nowrap">
+                      LOG OUT
+                    </MDBBtn>
+                  </div>
             )}
             </MDBNavbarNav>
           </MDBCollapse>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, Button, Modal} from "react-bootstrap";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
@@ -10,7 +11,7 @@ const JobCardDark = ({ job, withAdd, isChecked, addJob, removeJob }: IJobProps) 
   const [showModal, setShowModal] = useState<Job | null>(null);
   const [isAdded, setIsAdded] = useState(isChecked);
 
-  const renderTooltip = (props: any) => <Tooltip {...props}>{props}</Tooltip>;
+  const renderTooltip = (title: string) => <Tooltip id={title}>{title}</Tooltip>;
 
   const addItem = () => {
     setIsAdded(!isAdded);
@@ -61,8 +62,8 @@ const JobCardDark = ({ job, withAdd, isChecked, addJob, removeJob }: IJobProps) 
         centered
         onHide={() => setShowModal(null)}
         >
-				<Modal.Header>
-					<Modal.Title>
+				<Modal.Header closeButton>
+					<Modal.Title className={classes.CardTitle}>
 						{job.title}
 					</Modal.Title>
 				</Modal.Header>
@@ -71,15 +72,16 @@ const JobCardDark = ({ job, withAdd, isChecked, addJob, removeJob }: IJobProps) 
           <Map address={job.location}/>
           <Card.Img className={classes.CardLogoRound} src={job.company_logo} />
         </div>
-
+        
+        {/* TODO: parser for dangerouslySetInnerHTML */}
         <Card.Body>
-          {job.description}
+          <div dangerouslySetInnerHTML={{__html: job.description}} />
         </Card.Body>
 
         <Modal.Footer>
-          <Button as="a" bsPrefix="unset" disabled={!job.url} href={job?.url} target="_blank">
+          <a className="btn btn-secondary btn-lg" href={job?.url} target="_blank">
             CONTACT INFO
-					</Button>
+          </a>
 				</Modal.Footer>
 
 			</Modal>

@@ -5,6 +5,7 @@ import { Container } from "react-bootstrap";
 import { Redirect, Route, Switch } from "react-router-dom";
 import NavBarMDB from "./components/NavBar/NavBar";
 import HeaderMDB from "./components/Header/HeaderMDB";
+import Footer from "./components/Footer/Footer";
 import Auth from "./components/Auth";
 import JobsPage from './containers/JobsPage';
 import CandidatesPage from "./containers/CandidatesPage";
@@ -39,7 +40,7 @@ const App = () => {
       <HeaderMDB 
               loggedIn={loggedIn}
               user={user}/>
-      <MDBContainer fluid className='m-0 p-0'>
+      <MDBContainer fluid className='min-vh-100 m-0 p-0'>
         <Switch>
           <Route path="/" exact>
             <JobsPage />
@@ -48,6 +49,7 @@ const App = () => {
             <CandidatesPage />
           </Route>
           <Route path="/auth" exact>
+            <JobsPage />
             {!user?.email ? (
               <Auth
                 show={true}
@@ -60,6 +62,7 @@ const App = () => {
             )}
           </Route>
           <Route path="/login" exact>
+            <JobsPage />
             {!user?.email ? (
               <Auth
                 show={true}
@@ -84,6 +87,7 @@ const App = () => {
           </Route>
         </Switch>
       </MDBContainer>
+      <Footer />
     </div>
   );
 };

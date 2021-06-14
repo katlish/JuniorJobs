@@ -5,11 +5,11 @@ const JobsList = ({ jobs, withAdd, checkedJobs, addJob, removeJob }: IJobsListPr
   if (!jobs.length) return null;
   return (
     <section className="container">
-      <div className="row gx-5 m-auto">
+      <div className="row gy-5">
       {
         jobs.map((job) => {
               return (
-                <div className="col-xl-4 col-lg-6 col-sm-12 mb-4 d-flex justify-content-center">
+                <div className="col-xl-4 col-lg-6 col-sm-12 mb-4 d-flex justify-content-center" key={job.externalId}>
                   <JobCardDark 
                     job={job} 
                     key={job.externalId} 

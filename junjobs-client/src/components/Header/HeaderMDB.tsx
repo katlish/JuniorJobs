@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { IHeaderProps } from "../../types";
 import { userRole } from "../../store/constants/constants";
-// import bgImg from "../../imgs/windows.jpeg";
+// import bgImg from "../../imgs/mountains.jpeg";
 import bgImg from "../../imgs/robot.jpeg";
 
 const HeaderMDB = ({ user, loggedIn }: IHeaderProps) => {

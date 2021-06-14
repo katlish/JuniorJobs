@@ -85,14 +85,14 @@ const Auth = ({ show = false, logIn, signUp, type = 'login' }: IAuthProps) => {
         {authType === 'signup' ? (
 					<div>
 						Already have an account?{' '}
-						<Button as="a" bsPrefix="unset" onClick={changeType}>
+						<Button className="AuthLink" as="a" bsPrefix="unset" onClick={changeType}>
 							Login
 						</Button>
 					</div>
 				) : (
 					<div>
 						Don't have an account?{' '}
-						<Button as="a" bsPrefix="unset" onClick={changeType}>
+						<Button className="AuthLink" as="a" bsPrefix="unset" onClick={changeType}>
 							Signup
 						</Button>
 					</div>

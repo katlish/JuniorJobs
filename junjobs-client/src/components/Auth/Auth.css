@@ -33,3 +33,10 @@
 .modal-footer {
     border-top: 0;
 }
+
+.AuthLink,
+.AuthLink:hover {
+    color: #ffa900;
+    cursor: pointer;
+    font-weight: 600;
+}
