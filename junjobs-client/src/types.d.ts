@@ -13,31 +13,53 @@ export interface IHeaderProps {
 }
 
 
-//FIXME: add remove any
-export interface IJobsListProps {
-  jobs: Job[];
+export interface IFiltersBarProps {
+  country: string; 
+  onCountryChange: Function; 
+  onFavouritesChange: Function; 
+  isFavourite: boolean; 
+  role: userRole; 
+  onRemoteChange: Function;  
+  isRemote: boolean; 
+  remoteLabel: string;
+}
+
+export interface IGenericPageWithCardsProps {
+  visibleItems: ItemCard[]; 
+  isLoading: boolean; 
+  isRemote: boolean; 
+  isFavourite: boolean; 
+  country: string;
+  error: string;
+  userFavourites: string[];
+  role: userRole;
+  toggleIsRemoteAction: Function;
+  toggleIsFavouriteAction: Function;
+  updateFavouritesAction: Function;
+  addToFavouritesAction: Function;
+  removeFromFavouritesAction: Function;
+  setCountryAction: Function;
+  remoteLabel: string;
+  resultsText: string;
+  resultsTextForFavourites: string;
+}
+
+export interface ICardsListProps {
+  items: ItemCard[];
   withAdd: boolean;
-  checkedJobs: string[];
-  addJob: any;
-  removeJob: any;
+  checkedFavourites: string[];
+  addToFavourites: Function;
+  removeFromFavourites: Function;
 }
 
-export interface ICandidatesListProps {
-  candidates: Candidate[];
-}
-
-//FIXME: add remove any
-export interface IJobProps {
-  job: Job;
+export interface IGenericCardProps {
+  item: ItemCard;
   withAdd: boolean;
   isChecked: boolean;
-  addJob: any;
-  removeJob: any;
+  addToFavourites: Function;
+  removeFromFavourites: Function;
 }
 
-export interface ICandidateProps {
-  candidate: Candidate;
-}
 
 export interface IMapProps {
   address: string;
@@ -98,11 +120,11 @@ export interface CandidatesState {
 
 export interface Candidate {
   email: string;
-  createdAt?: string;
+  createdAt: string;
   description: string;
-  _id?: string;
+  _id: string;
   jobs: String[];
-  location: string | null;
+  location: string;
   name: string;
   url: string;
   yearsOfExperience: number;
@@ -152,3 +174,13 @@ export interface IAuthFormProps {
   type: string;
 }
 
+export interface ItemCard {
+  externalId: string;
+  logo: string;
+  title: string;
+  subtitle: string;
+  location: string;
+  createdAt: string;
+  description: string;
+  url: string;
+}

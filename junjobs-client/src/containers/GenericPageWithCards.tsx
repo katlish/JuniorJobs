@@ -1,0 +1,120 @@
+import {useState } from "react";
+import { useDispatch } from "react-redux";
+import { Spinner } from "react-bootstrap";
+import { IGenericPageWithCardsProps, Country } from "../types";
+import CardsList from "../components/CardsList/CardsList";
+import Pagination from "../components/Pagination/Pagination";
+import { PAGINATION_ITEMS_PER_PAGE, PAGINATION_PAGES_PER_BLOCK, userRole } from "../store/constants/constants";
+import FiltersBar from "../components/FiltersBar/FiltersBar";
+
+const GenericPageWithCards = ({
+    visibleItems, 
+    isLoading, 
+    isRemote, 
+    isFavourite, 
+    country,
+    error,
+    userFavourites,
+    role,
+    toggleIsRemoteAction,
+    toggleIsFavouriteAction,
+    updateFavouritesAction,
+    addToFavouritesAction,
+    removeFromFavouritesAction,
+    setCountryAction,
+    remoteLabel,
+    resultsText,
+    resultsTextForFavourites
+}: IGenericPageWithCardsProps) => {
+  const dispatch = useDispatch();
+
+  const onRemoteChange = () => {
+    dispatch(toggleIsRemoteAction());
+    paginate(1);
+  };
+
+  const onFavouritesChange = () => {
+    dispatch(toggleIsFavouriteAction());
+    paginate(1);
+    
+  };
+
+  const onSaveChange = () => {
+    dispatch(updateFavouritesAction(userFavourites));
+  };
+
+  const addToFavourites = (itemID: string) => {
+    dispatch(addToFavouritesAction(itemID, userFavourites));
+    onSaveChange();
+  }
+
+  const removeFromFavourites = (itemId: string) => {
+    dispatch(removeFromFavouritesAction(itemId, userFavourites));
+    onSaveChange();
+  }
+
+  const onCountryChange = (country: Country | null) => {
+    dispatch(setCountryAction(country))
+    paginate(1);
+  }
+
+  //pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = PAGINATION_ITEMS_PER_PAGE;
+  const pagesPerBlock = PAGINATION_PAGES_PER_BLOCK;
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItemsOnPage = visibleItems?.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (curPage: number) => setCurrentPage(curPage);
+
+ 
+  return (
+    <div className="text-white-50">
+      <FiltersBar 
+        country={country} 
+        onCountryChange={onCountryChange} 
+        onFavouritesChange={onFavouritesChange}
+        isFavourite={isFavourite}
+        role={role}
+        onRemoteChange={onRemoteChange}
+        isRemote={isRemote}
+        remoteLabel={remoteLabel}
+      />
+
+      <div className="my-5">
+        <p className="text-center">
+          {visibleItems?.length}
+          {isFavourite ? ` ${resultsTextForFavourites}` : ` ${resultsText}`} 
+          {isLoading && <Spinner as="span" variant="primary" animation="border" />}
+        </p>
+      </div>
+
+      <CardsList 
+        items={currentItemsOnPage} 
+        withAdd={role === userRole.CANDIDATE} 
+        checkedFavourites={userFavourites} 
+        addToFavourites={(itemId: string) => addToFavourites(itemId)} 
+        removeFromFavourites={(itemId: string) => removeFromFavourites(itemId)}
+      />
+
+      {
+        visibleItems?.length > 0 &&
+          <div className="my-5">
+            <Pagination totalItems={visibleItems?.length}
+                itemsPerPage={itemsPerPage}
+                paginate={paginate}
+                currentPage={currentPage}
+                pagesPerBlock={pagesPerBlock}
+            />
+          </div>
+      }
+
+
+      <h3 className="text-left mb-4">{error && `Error: ${error}`}</h3>
+    </div>
+  );
+};
+
+export default GenericPageWithCards;

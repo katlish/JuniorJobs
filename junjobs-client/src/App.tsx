@@ -1,14 +1,13 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { MDBContainer } from 'mdb-react-ui-kit';
-import { Container } from "react-bootstrap";
 import { Redirect, Route, Switch } from "react-router-dom";
 import NavBarMDB from "./components/NavBar/NavBar";
 import HeaderMDB from "./components/Header/HeaderMDB";
 import Footer from "./components/Footer/Footer";
 import Auth from "./components/Auth";
-import JobsPage from './containers/JobsPage';
-import CandidatesPage from "./containers/CandidatesPage";
+import JobsPageNew from './containers/JobsPageNew';
+import CandidatesPageNew from "./containers/CandidatesPageNew";
 import AddCandidatePage from "./containers/AddCandidatePage";
 import { logIn, signUp, logOut, setUserToken, getUserJobs } from "./store/actions/user";
 import { fetchCandidates, addOrUpdateCandidate } from "./store/actions/candidates";
@@ -43,13 +42,13 @@ const App = () => {
       <MDBContainer fluid className='min-vh-100 m-0 p-0'>
         <Switch>
           <Route path="/" exact>
-            <JobsPage />
+            <JobsPageNew />
           </Route>
           <Route path="/candidates" exact>
-            <CandidatesPage />
+            <CandidatesPageNew />
           </Route>
           <Route path="/auth" exact>
-            <JobsPage />
+            <JobsPageNew />
             {!user?.email ? (
               <Auth
                 show={true}
@@ -62,7 +61,7 @@ const App = () => {
             )}
           </Route>
           <Route path="/login" exact>
-            <JobsPage />
+            <JobsPageNew />
             {!user?.email ? (
               <Auth
                 show={true}

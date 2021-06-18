@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import { useHistory } from "react-router-dom";
 import CountriesList from '../components/CoutriesList/CountriesList';
 import { IAddCandidatePageProps , Candidate, Country } from '../types';
+import { date } from 'yup';
 
 
 const AddCandidatePage = ({email, existingCandidate, submitHandler}: IAddCandidatePageProps) => {
@@ -173,7 +174,7 @@ const AddCandidatePage = ({email, existingCandidate, submitHandler}: IAddCandida
 
 const createCandidateObj = (values: any) => {
     const jobsArr = []; 
-    const location: (Country | null) = values.location;
+    const location: Country = values.location;
 
     values.jobType.backend && jobsArr.push("backend");
     values.jobType.frontend && jobsArr.push("frontend");
@@ -183,11 +184,13 @@ const createCandidateObj = (values: any) => {
         email: values.email,
         description: values.description,
         jobs: jobsArr,
-        location:  location ? location!.name : null,
+        location:  location.name,
         name: values.name,
         url: values.url,
         yearsOfExperience: values.yearsOfExperience,
-        isremote: values.isremote
+        isremote: values.isremote,
+        _id: values.email,
+        createdAt: new Date().toISOString()
     }
     console.log("VALUES",{candidate});
 
