@@ -6,10 +6,10 @@ import NavBarMDB from "./components/NavBar/NavBar";
 import HeaderMDB from "./components/Header/HeaderMDB";
 import Footer from "./components/Footer/Footer";
 import Auth from "./components/Auth";
-import JobsPageNew from './containers/JobsPageNew';
-import CandidatesPageNew from "./containers/CandidatesPageNew";
+import JobsPage from './containers/JobsPage';
+import CandidatesPage from "./containers/CandidatesPage";
 import AddCandidatePage from "./containers/AddCandidatePage";
-import { logIn, signUp, logOut, setUserToken, getUserJobs } from "./store/actions/user";
+import { logIn, signUp, logOut, setUserToken, getUserData } from "./store/actions/user";
 import { fetchCandidates, addOrUpdateCandidate } from "./store/actions/candidates";
 import { SignInData, Candidate } from "./types";
 import { userRole } from "./store/constants/constants";
@@ -26,7 +26,7 @@ const App = () => {
 		if (token) {
 			dispatch(setUserToken(token));
       dispatch(fetchCandidates());
-      dispatch(getUserJobs());
+      dispatch(getUserData());
 		}
 	}, []);
 
@@ -42,13 +42,13 @@ const App = () => {
       <MDBContainer fluid className='min-vh-100 m-0 p-0'>
         <Switch>
           <Route path="/" exact>
-            <JobsPageNew />
+            <JobsPage />
           </Route>
           <Route path="/candidates" exact>
-            <CandidatesPageNew />
+            <CandidatesPage />
           </Route>
           <Route path="/auth" exact>
-            <JobsPageNew />
+            <JobsPage />
             {!user?.email ? (
               <Auth
                 show={true}
@@ -61,7 +61,7 @@ const App = () => {
             )}
           </Route>
           <Route path="/login" exact>
-            <JobsPageNew />
+            <JobsPage />
             {!user?.email ? (
               <Auth
                 show={true}

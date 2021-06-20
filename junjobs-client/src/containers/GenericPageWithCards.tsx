@@ -18,13 +18,15 @@ const GenericPageWithCards = ({
     role,
     toggleIsRemoteAction,
     toggleIsFavouriteAction,
-    updateFavouritesAction,
     addToFavouritesAction,
     removeFromFavouritesAction,
     setCountryAction,
     remoteLabel,
+    selectedItemsLabel,
+    isFilterHidden,
     resultsText,
-    resultsTextForFavourites
+    resultsTextForFavourites,
+    cardsWithAddCheckbox
 }: IGenericPageWithCardsProps) => {
   const dispatch = useDispatch();
 
@@ -39,18 +41,13 @@ const GenericPageWithCards = ({
     
   };
 
-  const onSaveChange = () => {
-    dispatch(updateFavouritesAction(userFavourites));
-  };
 
   const addToFavourites = (itemID: string) => {
     dispatch(addToFavouritesAction(itemID, userFavourites));
-    onSaveChange();
   }
 
   const removeFromFavourites = (itemId: string) => {
     dispatch(removeFromFavouritesAction(itemId, userFavourites));
-    onSaveChange();
   }
 
   const onCountryChange = (country: Country | null) => {
@@ -69,7 +66,6 @@ const GenericPageWithCards = ({
 
   const paginate = (curPage: number) => setCurrentPage(curPage);
 
- 
   return (
     <div className="text-white-50">
       <FiltersBar 
@@ -81,6 +77,8 @@ const GenericPageWithCards = ({
         onRemoteChange={onRemoteChange}
         isRemote={isRemote}
         remoteLabel={remoteLabel}
+        selectedItemsLabel={selectedItemsLabel}
+        isFilterHidden={isFilterHidden}
       />
 
       <div className="my-5">
@@ -93,7 +91,7 @@ const GenericPageWithCards = ({
 
       <CardsList 
         items={currentItemsOnPage} 
-        withAdd={role === userRole.CANDIDATE} 
+        withAdd={cardsWithAddCheckbox} 
         checkedFavourites={userFavourites} 
         addToFavourites={(itemId: string) => addToFavourites(itemId)} 
         removeFromFavourites={(itemId: string) => removeFromFavourites(itemId)}

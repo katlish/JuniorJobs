@@ -59,40 +59,41 @@ const user = (state = initialState, action: AnyAction) => {
         loggedIn: false,
       };
     }
-    case actionTypes.USER_UPDATE_JOBS_BEGIN:
+    case actionTypes.USER_UPDATE_DATA_BEGIN:
       return {
         ...state,
         isLoading: true,
         error: null,
       };
-    case actionTypes.USER_UPDATE_JOBS_SUCCESS: {
+    case actionTypes.USER_UPDATE_DATA_SUCCESS: {
       return {
         ...state,
         isLoading: false,
-        error: null,
+        error: null
       };
     }
-    case actionTypes.USER_UPDATE_JOBS_FAILURE: {
+    case actionTypes.USER_UPDATE_DATA_FAILURE: {
       return {
         ...state,
         isLoading: false,
         error: action.payload
       };
     }
-    case actionTypes.USER_GET_JOBS_BEGIN:
+    case actionTypes.USER_GET_DATA_BEGIN:
       return {
         ...state,
         isLoading: true,
         error: null,
       };
-    case actionTypes.USER_GET_JOBS_SUCCESS: {
+    case actionTypes.USER_GET_DATA_SUCCESS: {
       return {
         ...state,
         isLoading: false,
         error: null,
+        data: action.payload
       };
     }
-    case actionTypes.USER_GET_JOBS_FAILURE: {
+    case actionTypes.USER_GET_DATA_FAILURE: {
       return {
         ...state,
         isLoading: false,
@@ -127,6 +128,11 @@ const user = (state = initialState, action: AnyAction) => {
         ...state,
         data: {...state.data, jobs: action.payload}
       };
+    case actionTypes.USER_SET_CANDIDATES_ARR:
+      return {
+        ...state,
+        data: {...state.data, candidates: action.payload}
+      };  
     default:
       return state;
   }

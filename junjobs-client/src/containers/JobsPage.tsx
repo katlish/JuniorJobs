@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setUserJob, removeUserJob, updateUserJobs } from "../store/actions/user";
-import { fetchJobs, toggleIsRemote, toggleIsFavourite, setCountry } from "../store/actions/jobs";
+import { setUserJob, removeUserJob } from "../store/actions/user";
+import { fetchJobs } from "../store/actions/jobs";
+import { toggleIsRemote, toggleIsFavourite, setCountry } from "../store/actions/common";
 import { filterJobs } from '../store/selectors/jobs';
 import GenericPageWithCards from "./GenericPageWithCards";
 import { Job, ItemCard } from "../types";
+import { userRole } from "src/store/constants/constants";
 
 
 const formatJobItemsToItemCard = (jobItems: Job[]): ItemCard[] => {
@@ -20,7 +22,7 @@ const formatJobItemsToItemCard = (jobItems: Job[]): ItemCard[] => {
     }))
 }
 
-const JobsPageNew = () => {
+const JobsPage = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -30,10 +32,10 @@ const JobsPageNew = () => {
     const visibleItems = useSelector(filterJobs);
     const formattedVisibleItems = formatJobItemsToItemCard(visibleItems);
     const isJobsLoading = useSelector((state: any) => state.jobs.isLoading);
-    const isRemote = useSelector((state: any) => state.jobs.isRemote);
-    const isFavourite = useSelector((state: any) => state.jobs.isFavourite);
-    const country = useSelector((state: any) => state.jobs.country);
-    const jobsError = useSelector((state: any) => state.jobs.error);
+    const isRemote = useSelector((state: any) => state.common.isRemote);
+    const isFavourite = useSelector((state: any) => state.common.isFavourite);
+    const country = useSelector((state: any) => state.common.country);
+    const jobsError = useSelector((state: any) => state.common.error);
     const userFavourites = useSelector((state: any) => state.user.data?.jobs);
     const role = useSelector((state: any) => state.user.data?.role);
 
@@ -49,15 +51,17 @@ const JobsPageNew = () => {
             role={role} 
             toggleIsRemoteAction={toggleIsRemote} 
             toggleIsFavouriteAction={toggleIsFavourite} 
-            updateFavouritesAction={updateUserJobs} 
             addToFavouritesAction={setUserJob} 
             removeFromFavouritesAction={removeUserJob} 
             setCountryAction={setCountry}
             remoteLabel="Remote Jobs"
+            selectedItemsLabel="My Selected Jobs"
+            isFilterHidden={role === userRole.HR}
             resultsText="Software Jobs Found"
             resultsTextForFavourites="Your Selected Software Jobs Found" 
+            cardsWithAddCheckbox={role === userRole.CANDIDATE}
         />
     );
 };
 
-export default JobsPageNew;
+export default JobsPage;

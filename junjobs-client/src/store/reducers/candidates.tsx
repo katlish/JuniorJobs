@@ -4,10 +4,7 @@ import { CandidatesState } from "../../types";
 
 const initialState: CandidatesState = {
   isLoading: true,
-  error: null,
-  data: [],
-  isRemote: false,
-  country: null
+  data: []
 };
 
 const candidates = (state = initialState, action: AnyAction) => {
@@ -21,7 +18,6 @@ const candidates = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         isLoading: false,
-        error: null,
         data: action.payload,
       };
     }
@@ -29,7 +25,6 @@ const candidates = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         isLoading: false,
-        error: action.payload
       };
     }
     case actionTypes.CANDIDATES_ADD_OR_UPDATE_CANDIDATE_BEGIN:
@@ -41,7 +36,6 @@ const candidates = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         isLoading: false,
-        error: null,
         data: action.payload
       };
     }
@@ -49,26 +43,8 @@ const candidates = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         isLoading: false,
-        error: action.payload
       };
     }
-    case actionTypes.CANDIDATES_SET_COUNTRY: {
-      return {
-        ...state,
-        country: action.country
-      };
-    }
-    case actionTypes.CANDIDATES_IS_REMOTE_TOGGLE: {
-      return {
-        ...state,
-        isRemote: !state.isRemote
-      };
-    }
-    case actionTypes.RESET_ERROR:
-      return {
-        ...state,
-        error: null
-      };
     default:
       return state;
   }

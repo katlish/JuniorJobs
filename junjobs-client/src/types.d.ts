@@ -22,6 +22,8 @@ export interface IFiltersBarProps {
   onRemoteChange: Function;  
   isRemote: boolean; 
   remoteLabel: string;
+  selectedItemsLabel: string;
+  isFilterHidden: boolean;
 }
 
 export interface IGenericPageWithCardsProps {
@@ -35,13 +37,15 @@ export interface IGenericPageWithCardsProps {
   role: userRole;
   toggleIsRemoteAction: Function;
   toggleIsFavouriteAction: Function;
-  updateFavouritesAction: Function;
   addToFavouritesAction: Function;
   removeFromFavouritesAction: Function;
   setCountryAction: Function;
   remoteLabel: string;
+  selectedItemsLabel: string;
+  isFilterHidden: boolean;
   resultsText: string;
   resultsTextForFavourites: string;
+  cardsWithAddCheckbox: boolean;
 }
 
 export interface ICardsListProps {
@@ -103,18 +107,18 @@ export interface UserState {
 
 export interface JobsState {
   isLoading: boolean;
-  error: any;
   data: Job[];
-  isRemote: boolean;
-  country: Country | null;
-  isFavourite: boolean;
 }
 
 export interface CandidatesState {
   isLoading: boolean;
-  error: any;
   data: Candidate[];
+}
+
+export interface CommonState {
+  error: any;
   isRemote: boolean;
+  isFavourite: boolean;
   country: Country | null;
 }
 

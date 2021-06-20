@@ -2,9 +2,9 @@ import { createSelector } from 'reselect';
 import { Job } from "../../types";
 
 const getJobs = (state: any) => state.jobs.data;
-const getCountry = (state: any) => state.jobs.country;
-const getIsRemote = (state: any) => state.jobs.isRemote;
-const getIsFavourite = (state: any) => state.jobs.isFavourite;
+const getCountry = (state: any) => state.common.country;
+const getIsRemote = (state: any) => state.common.isRemote;
+const getIsFavourite = (state: any) => state.common.isFavourite;
 const getUserJobs = (state: any) => state.user.data.jobs;
 
 export const filterJobs = createSelector(getJobs, getCountry, getIsRemote, getIsFavourite, getUserJobs, (jobs, country, isRemote, isFavourite, favourites) => {

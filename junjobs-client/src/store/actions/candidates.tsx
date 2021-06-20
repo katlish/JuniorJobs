@@ -2,7 +2,7 @@ import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import * as actions from "../constants/constants";
 import { API_BASE_URL } from "../../API";
-import { Candidate, CandidatesState, Country } from "../../types";
+import { Candidate, CandidatesState } from "../../types";
 
 export const fetchCandidates = (): ThunkAction<
   void,
@@ -15,8 +15,9 @@ export const fetchCandidates = (): ThunkAction<
     const { data } = await API_BASE_URL.get('/candidates');
     dispatch({ type: actions.CANDIDATES_FETCH_SUCCESS, payload: data });
   } catch (e) {
+    dispatch({ type: actions.CANDIDATES_FETCH_FAILURE });
     dispatch({
-      type: actions.CANDIDATES_FETCH_FAILURE,
+      type: actions.COMMON_SET_ERROR,
       payload: e.message
     });
     throw e;
@@ -35,20 +36,13 @@ export const addOrUpdateCandidate = (candidate: Candidate): ThunkAction<
     dispatch({ type: actions.CANDIDATES_FETCH_BEGIN });
     const { data } = await API_BASE_URL.get('/candidates');
     dispatch({ type: actions.CANDIDATES_ADD_OR_UPDATE_CANDIDATE_SUCCESS, payload: data});
+    dispatch({ type: actions.COMMON_RESET_ERROR });
   } catch (e) {
+    dispatch({ type: actions.CANDIDATES_ADD_OR_UPDATE_CANDIDATE_FAILURE});
     dispatch({
-      type: actions.CANDIDATES_ADD_OR_UPDATE_CANDIDATE_FAILURE,
+      type: actions.COMMON_SET_ERROR,
       payload: e.message
     });
     throw e;
   }
 };
-
-export const setCountry = (country: Country | null) => ({
-	type: actions.CANDIDATES_SET_COUNTRY,
-  country
-});
-
-export const toggleIsRemote = () => ({
-	type: actions.CANDIDATES_IS_REMOTE_TOGGLE
-});

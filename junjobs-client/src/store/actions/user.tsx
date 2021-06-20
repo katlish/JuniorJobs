@@ -49,61 +49,93 @@ export const setUserToken = (token: string) => ({
   }
 });
 
-export const setUserJob = (job: string, userCurrentJobs: string[]) => {
-  if (job){
-    const items = userCurrentJobs;
-    const index = items.indexOf(job);
-    if (index === -1) {
-      items.push(job);
-      return ({
-        type: actions.USER_SET_JOBS_ARR,
-        payload: items
-      })
-    }
-  }
-  return;
-};
-
-export const removeUserJob = (job: string, userCurrentJobs: string[]) => {
-  if (job){
-    const items = userCurrentJobs;
-    const index = items.indexOf(job);
-    if (index > -1) {
-      items.splice(index, 1);
-      return ({
-        type: actions.USER_SET_JOBS_ARR,
-        payload: items
-      })
-    }
-  }
-  return;
-};
-
-export const updateUserJobs = (jobs: string[]): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+export const getUserData = (): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
   try {
-    dispatch({ type: actions.USER_UPDATE_JOBS_BEGIN });
-    await API_BASE_URL.post("/user", {jobs});
-    dispatch({ type: actions.USER_UPDATE_JOBS_SUCCESS});
-  } catch (e) {
-    dispatch({
-      type: actions.USER_UPDATE_JOBS_FAILURE,
-      payload: e.message
-    });
-    throw e;
-  }
-};
-
-export const getUserJobs = (): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
-  try {
-    dispatch({ type: actions.USER_GET_JOBS_BEGIN });
+    dispatch({ type: actions.USER_GET_DATA_BEGIN });
     const { data } = await API_BASE_URL.get("/user");
-    dispatch({type: actions.USER_SET_JOBS_ARR, payload: data.jobs });
-    dispatch({ type: actions.USER_GET_JOBS_SUCCESS });
+    dispatch({ type: actions.USER_GET_DATA_SUCCESS, payload: data });
   } catch (e) {
     dispatch({
-      type: actions.USER_GET_JOBS_FAILURE,
+      type: actions.USER_GET_DATA_FAILURE,
       payload: e.message
     });
     throw e;
   }
 };
+
+export const setUserJob = (job: string, userCurrentJobs: string[]): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+  const res = checkAndPushNewItem(job, userCurrentJobs);
+  dispatch(updateUserJobsState(res.itemsUpdated));
+};
+
+export const removeUserJob = (job: string, userCurrentJobs: string[]): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+  const res = checkAndRemoveItem(job, userCurrentJobs);
+  dispatch(updateUserJobsState(res.itemsUpdated));
+};
+
+export const setUserCandidate = (candidate: string, userCurrentCands: string[]): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+  const res = checkAndPushNewItem(candidate, userCurrentCands);
+  dispatch(updateUserCandidatesState(res.itemsUpdated));
+};
+
+export const removeUserCandidate = (candidate: string, userCurrentCands: string[]): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+  const res = checkAndRemoveItem(candidate, userCurrentCands);
+  dispatch(updateUserCandidatesState(res.itemsUpdated));
+};
+
+const updateUserJobsState = (jobs: (string[] | null)): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+  if (jobs){
+    dispatch({
+      type: actions.USER_SET_JOBS_ARR,
+      payload: jobs
+    });
+    dispatch(updateUserData({jobs: jobs}));
+  }
+};
+
+const updateUserCandidatesState = (cands: (string[] | null)): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+  if (cands){
+    dispatch({
+      type: actions.USER_SET_CANDIDATES_ARR,
+      payload: cands
+    });
+    dispatch(updateUserData({candidates: cands}));
+  }
+};
+
+const checkAndPushNewItem = (item: string, currentItems: string[]) => {
+  if (item){
+    const items = currentItems;
+    const index = items.indexOf(item);
+    if (index === -1) {
+      items.push(item);
+      return ({itemsUpdated: items})
+    }
+  }
+  return ({itemsUpdated: null})
+}
+
+const checkAndRemoveItem = (item: string, currentItems: string[]) => {
+  const items = currentItems;
+  const index = items.indexOf(item);
+  if (index > -1) {
+    items.splice(index, 1);
+    return ({itemsUpdated: items})
+  }
+  return ({itemsUpdated: null})
+}
+
+const updateUserData = (selectedItems: any): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+  try {
+    dispatch({ type: actions.USER_UPDATE_DATA_BEGIN });
+    await API_BASE_URL.post("/user", selectedItems);
+    dispatch({ type: actions.USER_UPDATE_DATA_SUCCESS });
+  } catch (e) {
+    dispatch({
+      type: actions.USER_UPDATE_DATA_FAILURE,
+      payload: e.message
+    });
+    throw e;
+  }
+};
+
