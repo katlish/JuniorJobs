@@ -36,7 +36,6 @@ export const addOrUpdateCandidate = (candidate: Candidate): ThunkAction<
     dispatch({ type: actions.CANDIDATES_FETCH_BEGIN });
     const { data } = await API_BASE_URL.get('/candidates');
     dispatch({ type: actions.CANDIDATES_ADD_OR_UPDATE_CANDIDATE_SUCCESS, payload: data});
-    dispatch({ type: actions.COMMON_RESET_ERROR });
   } catch (e) {
     dispatch({ type: actions.CANDIDATES_ADD_OR_UPDATE_CANDIDATE_FAILURE});
     dispatch({

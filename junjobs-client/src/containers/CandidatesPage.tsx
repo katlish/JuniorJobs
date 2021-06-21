@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userRole } from "src/store/constants/constants";
 import { fetchCandidates } from "../store/actions/candidates";
 import { setUserCandidate, removeUserCandidate} from "../store/actions/user";
-import { toggleIsRemote, toggleIsFavourite, setCountry } from "../store/actions/common";
+import { toggleIsRemote, toggleIsFavourite, toggleIsBackend, toggleIsFrontend, toggleIsFullstack, setCountry } from "../store/actions/common";
 import { filterCandidates } from '../store/selectors/candidates';
 import { ItemCard, Candidate } from "../types";
 import GenericPageWithCards from "./GenericPageWithCards";
@@ -11,16 +11,29 @@ import GenericPageWithCards from "./GenericPageWithCards";
 const defaultLogo = "https://www.flaticon.com/svg/static/icons/svg/1484/1484861.svg";
 
 const formatCandidateItemsToItemCard = (candidates: Candidate[]): ItemCard[] => {
-    return candidates.map((candidate: Candidate) => ({
-        externalId: candidate._id,
-        logo: defaultLogo,
-        title: candidate.name,
-        subtitle: candidate.yearsOfExperience.toString(),
-        location: candidate.location,
-        createdAt: candidate.createdAt,
-        description: candidate.description,
-        url: candidate.url
-    }))
+    
+    return candidates.map((candidate: Candidate) => {
+        const tags: String[] = [];
+        if(candidate.isremote){
+            tags.push("remote");
+        }
+        if(candidate.jobs.length){
+            candidate.jobs.map((tag: String) => {
+                tags.push(tag);
+            })
+        }
+        return {
+            externalId: candidate._id,
+            logo: defaultLogo,
+            title: candidate.name,
+            subtitle: candidate.yearsOfExperience.toString(),
+            location: candidate.location,
+            createdAt: candidate.createdAt,
+            description: candidate.description,
+            url: candidate.url,
+            tags: tags
+        }
+    })
 }
 
 const CandidatesPage = () => {
@@ -51,6 +64,9 @@ const CandidatesPage = () => {
                 userFavourites={userFavourites} 
                 role={role} 
                 toggleIsRemoteAction={toggleIsRemote} 
+                toggleIsBackendAction={toggleIsBackend}
+                toggleIsFrontendAction={toggleIsFrontend}
+                toggleIsFullstackAction={toggleIsFullstack}
                 toggleIsFavouriteAction={toggleIsFavourite} 
                 addToFavouritesAction={setUserCandidate} 
                 removeFromFavouritesAction={removeUserCandidate} 

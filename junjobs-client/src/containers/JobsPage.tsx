@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setUserJob, removeUserJob } from "../store/actions/user";
 import { fetchJobs } from "../store/actions/jobs";
-import { toggleIsRemote, toggleIsFavourite, setCountry } from "../store/actions/common";
+import { toggleIsRemote, toggleIsFavourite, toggleIsBackend, toggleIsFrontend, toggleIsFullstack, setCountry } from "../store/actions/common";
 import { filterJobs } from '../store/selectors/jobs';
 import GenericPageWithCards from "./GenericPageWithCards";
 import { Job, ItemCard } from "../types";
@@ -10,16 +10,28 @@ import { userRole } from "src/store/constants/constants";
 
 
 const formatJobItemsToItemCard = (jobItems: Job[]): ItemCard[] => {
-    return jobItems.map((job: Job) => ({
-        externalId: job.externalId,
-        logo: job.company_logo,
-        title: job.title,
-        subtitle: job.company,
-        location: job.location,
-        createdAt: job.createdAt,
-        description: job.description,
-        url: job.url
-    }))
+    return jobItems.map((job: Job) => {
+        const tags: String[] = [];
+        if(job.isremote){
+            tags.push("remote");
+        }
+        if(job.jobs.length){
+            job.jobs.map((tag: String) => {
+                tags.push(tag);
+            })
+        }
+        return {
+            externalId: job.externalId,
+            logo: job.company_logo,
+            title: job.title,
+            subtitle: job.company,
+            location: job.location,
+            createdAt: job.createdAt,
+            description: job.description,
+            url: job.url,
+            tags: tags
+        }
+    })
 }
 
 const JobsPage = () => {
@@ -50,6 +62,9 @@ const JobsPage = () => {
             userFavourites={userFavourites} 
             role={role} 
             toggleIsRemoteAction={toggleIsRemote} 
+            toggleIsBackendAction={toggleIsBackend}
+            toggleIsFrontendAction={toggleIsFrontend}
+            toggleIsFullstackAction={toggleIsFullstack}
             toggleIsFavouriteAction={toggleIsFavourite} 
             addToFavouritesAction={setUserJob} 
             removeFromFavouritesAction={removeUserJob} 

@@ -20,6 +20,9 @@ export interface IFiltersBarProps {
   isFavourite: boolean; 
   role: userRole; 
   onRemoteChange: Function;  
+  onBackendChange: Function;
+  onFullstackChange: Function;
+  onFrontendChange: Function;
   isRemote: boolean; 
   remoteLabel: string;
   selectedItemsLabel: string;
@@ -36,6 +39,9 @@ export interface IGenericPageWithCardsProps {
   userFavourites: string[];
   role: userRole;
   toggleIsRemoteAction: Function;
+  toggleIsBackendAction: Function;
+  toggleIsFrontendAction: Function;
+  toggleIsFullstackAction: Function;
   toggleIsFavouriteAction: Function;
   addToFavouritesAction: Function;
   removeFromFavouritesAction: Function;
@@ -120,6 +126,9 @@ export interface CommonState {
   isRemote: boolean;
   isFavourite: boolean;
   country: Country | null;
+  isBackend: boolean;
+  isFullstack: boolean;
+  isFrontend: boolean;
 }
 
 export interface Candidate {
@@ -187,4 +196,5 @@ export interface ItemCard {
   createdAt: string;
   description: string;
   url: string;
+  tags: String[];
 }

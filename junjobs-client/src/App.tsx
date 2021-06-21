@@ -11,6 +11,7 @@ import CandidatesPage from "./containers/CandidatesPage";
 import AddCandidatePage from "./containers/AddCandidatePage";
 import { logIn, signUp, logOut, setUserToken, getUserData } from "./store/actions/user";
 import { fetchCandidates, addOrUpdateCandidate } from "./store/actions/candidates";
+import { fetchJobs } from "./store/actions/jobs";
 import { SignInData, Candidate } from "./types";
 import { userRole } from "./store/constants/constants";
 
@@ -25,10 +26,17 @@ const App = () => {
 	useEffect(() => {
 		if (token) {
 			dispatch(setUserToken(token));
+      dispatch(fetchJobs());
       dispatch(fetchCandidates());
       dispatch(getUserData());
 		}
 	}, []);
+
+  const onLogin = (userData: SignInData) => {
+    dispatch(logIn(userData));
+    dispatch(fetchJobs());
+    dispatch(fetchCandidates());
+  }
 
   return (
     <div style={{background: "#191918"}}>
@@ -52,7 +60,7 @@ const App = () => {
             {!user?.email ? (
               <Auth
                 show={true}
-                logIn={(userData: SignInData) => dispatch(logIn(userData))}
+                logIn={onLogin}
                 signUp={(userData: SignInData) => dispatch(signUp(userData))}
                 type='signup'
               />

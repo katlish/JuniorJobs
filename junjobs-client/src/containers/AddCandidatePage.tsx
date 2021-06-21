@@ -3,23 +3,21 @@ import { validationSchema } from './utils/Validations';
 import { useFormik } from 'formik';
 import { useHistory } from "react-router-dom";
 import CountriesList from '../components/CoutriesList/CountriesList';
-import { IAddCandidatePageProps , Candidate, Country } from '../types';
-import { date } from 'yup';
+import { IAddCandidatePageProps , Country } from '../types';
 
 
 const AddCandidatePage = ({email, existingCandidate, submitHandler}: IAddCandidatePageProps) => {
     const history = useHistory();
-    
     const initialValues = {
         email,
         name: existingCandidate?.name,
         yearsOfExperience: existingCandidate?.yearsOfExperience,
         jobType: {
-            fullstack: false,
-            frontend: false,
-            backend: false
+            fullstack: existingCandidate && existingCandidate.jobs.indexOf("fullstack") > -1,
+            frontend: existingCandidate && existingCandidate.jobs.indexOf("frontend") > -1,
+            backend: existingCandidate && existingCandidate.jobs.indexOf("backend") > -1
         },
-        location: null,
+        location: existingCandidate?.location || null,
         description: existingCandidate?.description,
         url: existingCandidate?.url,
         isremote: existingCandidate?.isremote
@@ -48,7 +46,6 @@ const AddCandidatePage = ({email, existingCandidate, submitHandler}: IAddCandida
 			}
 		},
 	});
-    console.log(formik.values);
 
     const onCountryChange = (country: Country | null) => {
         formik.setFieldValue("location", country);
@@ -59,7 +56,7 @@ const AddCandidatePage = ({email, existingCandidate, submitHandler}: IAddCandida
         <h3 className="my-3 text-center">
                 ADD YOUR CANDIDATURE
         </h3>
-        <div className="py-4 mb-2 d-flex justify-content-center">
+        <div className="py-4 mb-5 d-flex justify-content-center">
             
             <Form noValidate onSubmit={formik.handleSubmit}>
                 <Form.Group controlId="email">
@@ -97,9 +94,9 @@ const AddCandidatePage = ({email, existingCandidate, submitHandler}: IAddCandida
                     </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group>
-                    <Form.Check inline type="checkbox" id="fullstack" label="fullstack" onChange={() => formik.setFieldValue("jobType", {...formik.values.jobType, fullstack: !formik.values.jobType.fullstack})}/>
-                    <Form.Check inline type="checkbox" id="backend"label="backend" onChange={() => formik.setFieldValue("jobType", {...formik.values.jobType, backend: !formik.values.jobType.backend})}/>
-                    <Form.Check inline type="checkbox" id="frontend"label="frontend" onChange={() => formik.setFieldValue("jobType", {...formik.values.jobType, frontend: !formik.values.jobType.frontend})}/>
+                    <Form.Check inline type="checkbox" id="fullstack" label="fullstack" checked={formik.values.jobType.fullstack} onChange={() => formik.setFieldValue("jobType", {...formik.values.jobType, fullstack: !formik.values.jobType.fullstack})}/>
+                    <Form.Check inline type="checkbox" id="backend"label="backend" checked={formik.values.jobType.backend} onChange={() => formik.setFieldValue("jobType", {...formik.values.jobType, backend: !formik.values.jobType.backend})}/>
+                    <Form.Check inline type="checkbox" id="frontend"label="frontend" checked={formik.values.jobType.frontend} onChange={() => formik.setFieldValue("jobType", {...formik.values.jobType, frontend: !formik.values.jobType.frontend})}/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Location</Form.Label>
@@ -180,7 +177,7 @@ const createCandidateObj = (values: any) => {
     values.jobType.frontend && jobsArr.push("frontend");
     values.jobType.fullstack && jobsArr.push("fullstack");
     
-    const candidate: Candidate = {
+    const candidate: any = {
         email: values.email,
         description: values.description,
         jobs: jobsArr,
@@ -188,11 +185,8 @@ const createCandidateObj = (values: any) => {
         name: values.name,
         url: values.url,
         yearsOfExperience: values.yearsOfExperience,
-        isremote: values.isremote,
-        _id: values.email,
-        createdAt: new Date().toISOString()
+        isremote: values.isremote
     }
-    console.log("VALUES",{candidate});
 
     return candidate;
 }

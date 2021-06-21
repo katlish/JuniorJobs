@@ -51,6 +51,11 @@ const GenericCard = ({ item, withAdd, isChecked, addToFavourites, removeFromFavo
                 <li className="list-group-item bg-dark text-white">{item.location}</li>
                 <li className="list-group-item bg-dark text-white">{item.createdAt}</li>
             </ul>
+            <div className="d-flex flex-wrap mt-3">
+              {item.tags.map((tag: String, i) => 
+                <h5 key={i}><span className="badge bg-black mx-2">{tag}</span></h5>
+              )}
+            </div>
         </div>
         <div className="card-footer text-muted text-center mb-4">
           <a href="#" className="btn btn-secondary" onClick={() => setShowModal(item)}>More info</a>

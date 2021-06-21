@@ -17,6 +17,9 @@ const GenericPageWithCards = ({
     userFavourites,
     role,
     toggleIsRemoteAction,
+    toggleIsBackendAction,
+    toggleIsFrontendAction,
+    toggleIsFullstackAction,
     toggleIsFavouriteAction,
     addToFavouritesAction,
     removeFromFavouritesAction,
@@ -32,6 +35,21 @@ const GenericPageWithCards = ({
 
   const onRemoteChange = () => {
     dispatch(toggleIsRemoteAction());
+    paginate(1);
+  };
+
+  const onBackendChange = () => {
+    dispatch(toggleIsBackendAction());
+    paginate(1);
+  };
+
+  const onFrontendChange = () => {
+    dispatch(toggleIsFrontendAction());
+    paginate(1);
+  };
+
+  const onFullstackChange = () => {
+    dispatch(toggleIsFullstackAction());
     paginate(1);
   };
 
@@ -75,6 +93,9 @@ const GenericPageWithCards = ({
         isFavourite={isFavourite}
         role={role}
         onRemoteChange={onRemoteChange}
+        onBackendChange={onBackendChange}
+        onFrontendChange={onFrontendChange}
+        onFullstackChange={onFullstackChange}
         isRemote={isRemote}
         remoteLabel={remoteLabel}
         selectedItemsLabel={selectedItemsLabel}

@@ -32,6 +32,7 @@ exports.signUp = async (req, res, next) => {
 	}
 };
 
+//TODO: trim whitespaces
 exports.login = async (req, res, next) => {
 	const { email, password } = req.body;
 	let loggedinUser;
