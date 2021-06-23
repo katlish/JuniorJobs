@@ -54,6 +54,11 @@ export const filterJobs = createSelector(
 	if (isFavourite && favourites){
 		filteredJobs = filteredJobs.filter((job: Job) => favourites.includes(job.externalId));
 	}
-
-	return filteredJobs;
+	
+	return sortByDate(filteredJobs);
 });
+
+
+
+const sortByDate = (jobs: Job[]): Job[] => 
+	jobs.sort((j1, j2) => new Date(j2.createdAt).getTime() - new Date(j1.createdAt).getTime());

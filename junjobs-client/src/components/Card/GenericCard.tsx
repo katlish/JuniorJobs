@@ -18,6 +18,8 @@ const GenericCard = ({ item, withAdd, isChecked, addToFavourites, removeFromFavo
     (!isAdded) ? addToFavourites(item.externalId) : removeFromFavourites(item.externalId);
   }
 
+  const fromatDate = (date: string): string => new Date(date).toDateString().toString();
+
   return (
     <>
     <div key={item.externalId} className="card bg-dark shadow-3-strong" style={{width: "22rem"}}>
@@ -49,7 +51,7 @@ const GenericCard = ({ item, withAdd, isChecked, addToFavourites, removeFromFavo
             <h6 className="card-subtitle mb-2 text-muted">{item.subtitle}</h6>
             <ul className="list-group list-group-flush ">
                 <li className="list-group-item bg-dark text-white">{item.location}</li>
-                <li className="list-group-item bg-dark text-white">{item.createdAt}</li>
+                <li className="list-group-item bg-dark text-white">{fromatDate(item.createdAt)}</li>
             </ul>
             <div className="d-flex flex-wrap mt-3">
               {item.tags.map((tag: String, i) => 

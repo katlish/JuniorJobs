@@ -56,5 +56,8 @@ export const filterCandidates = createSelector(
 		filteredCandidates = filteredCandidates.filter((candidate : Candidate) => favourites.includes(candidate._id));
 	}
 
-	return filteredCandidates;
+	return sortByDate(filteredCandidates);
 });
+
+const sortByDate = (candidates: Candidate[]): Candidate[] => 
+	candidates.sort((j1, j2) => new Date(j2.createdAt).getTime() - new Date(j1.createdAt).getTime());
