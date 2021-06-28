@@ -3,8 +3,10 @@ import { Card, Modal} from "react-bootstrap";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Map from "../Map/Map";
+import LazyImage from "../LazyImage/LazyImage";
 import classes from "./MyCard.module.css";
 import { IGenericCardProps, ItemCard } from "../../types";
+import placeholder from "../../imgs/placeholder2.gif";
 
 
 const GenericCard = ({ item, withAdd, isChecked, addToFavourites, removeFromFavourites }: IGenericCardProps) => {
@@ -24,11 +26,21 @@ const GenericCard = ({ item, withAdd, isChecked, addToFavourites, removeFromFavo
     <>
     <div key={item.externalId} className="card bg-dark shadow-3-strong" style={{width: "22rem"}}>
         <div className="card-header p-3 d-flex justify-content-between">
-          <img src={item.logo}
+          <div className="rounded p-1 bg-light ms-auto" style={{width: "5rem", height: "5rem"}}>
+            <LazyImage
+                  className="card-img rounded" 
+                  style={{width: "100%", height: "100%", objectFit: "contain"}}
+                  errorImg="https://image.shutterstock.com/image-vector/no-image-available-vector-illustration-260nw-744886198.jpg"
+                  placeholderImg={placeholder}
+                  src={item.logo}
+              />
+          </div>
+            
+          {/* <img src={item.logo}
                 className="card-img rounded p-1 bg-light ms-auto" 
                 style={{width: "5rem", height: "5rem", objectFit: "contain"}}
                 alt="logo"
-          />
+          /> */}
           {withAdd && (<div className="ms-auto">
                             <input 
                               type="checkbox" 

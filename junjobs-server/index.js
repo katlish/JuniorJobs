@@ -7,6 +7,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const jobsRoutes = require('./routes/jobs');
 const candidatesRoutes = require('./routes/candidates');
+const cloudinaryRoutes = require('./routes/cloudinary');
 
 require('dotenv').config();
 
@@ -18,13 +19,22 @@ app.use(
 		credentials: true,
 	}),
 );
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ 
+	limit: '50mb',
+	parameterLimit: 100000,
+	extended: true 
+ }));
+
+app.use(bodyParser.json({
+	limit: '50mb'
+}));
+  
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/jobs', jobsRoutes);
 app.use('/candidates', candidatesRoutes);
+app.use('/images', cloudinaryRoutes);
 
 app.use((error, req, res, next) => {
 	const { statusCode, message, data } = error;
