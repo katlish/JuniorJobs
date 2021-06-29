@@ -26,7 +26,7 @@ const formatCandidateItemsToItemCard = (candidates: Candidate[]): ItemCard[] => 
             externalId: candidate._id,
             logo: defaultLogo,
             title: candidate.name,
-            subtitle: candidate.yearsOfExperience.toString(),
+            subtitle: `Work Experience: ${candidate.yearsOfExperience.toString()}`,
             location: candidate.location,
             createdAt: candidate.createdAt,
             description: candidate.description,

@@ -60,7 +60,7 @@ const App = () => {
             {!user?.email ? (
               <Auth
                 show={true}
-                logIn={onLogin}
+                logIn={(userData: SignInData) => dispatch(logIn(userData))}
                 signUp={(userData: SignInData) => dispatch(signUp(userData))}
                 type='signup'
               />

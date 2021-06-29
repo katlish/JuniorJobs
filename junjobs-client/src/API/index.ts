@@ -18,7 +18,7 @@ API_BASE_URL.interceptors.response.use(
     return res;
   },
   error => {
-    if (error.response?.status === 401 && error.response?.config.url !== "/auth/login") {
+    if (error.response?.status === 401 && error.response?.config.url !== "/auth/login" && error.response?.config.url !== "/auth/signup") {
       localStorage.removeItem("token");
       window.location.reload();
     }

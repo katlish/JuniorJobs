@@ -45,7 +45,7 @@ const Auth = ({ show = false, logIn, signUp, type = 'login' }: IAuthProps) => {
 					await signUp(values);
           setStatus({
             type: 'success',
-            text: 'Success! Now you can Log In.',
+            text: `Success! Please check your mailbox - ${values.email}.`,
           });
 				} 
 				if (authType === 'login') {
@@ -56,7 +56,7 @@ const Auth = ({ show = false, logIn, signUp, type = 'login' }: IAuthProps) => {
 				console.log('e', e);
         setStatus({
           type: "danger",
-          text: e.message
+          text: e.response.data.message
         });
       }
     }

@@ -132,7 +132,7 @@ const AddCandidatePage = ({email, existingCandidate, submitHandler}: IAddCandida
                     </Form.Control.Feedback>
                 </Form.Group> 
                 <Form.Group controlId="isremote">
-                    <Form.Check inline type="checkbox" label="Is Remote" id="isremote" onChange={() => formik.setFieldValue("isremote", !formik.values.isremote)}/>
+                    <Form.Check inline type="checkbox" label="Is Remote" id="isremote" checked={formik.values.isremote} onChange={() => formik.setFieldValue("isremote", !formik.values.isremote)}/>
                 </Form.Group>
                 
                 <div className="d-flex justify-content-end align-items-center">
@@ -142,6 +142,7 @@ const AddCandidatePage = ({email, existingCandidate, submitHandler}: IAddCandida
                     )}
                     <Button
                         as="a" 
+                        role="button"
                         bsPrefix="unset"
                         className="mx-3"
                         onClick={() => history.push("/candidates")}
