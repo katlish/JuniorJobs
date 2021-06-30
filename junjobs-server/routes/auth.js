@@ -7,7 +7,7 @@ router.post('/signup', authController.signUp);
 
 router.post('/login', authController.login);
 
-router.get('/confirmation', authController.confirmationPost);
+router.get('/confirmation/:confirmationCode', authController.confirmationGet);
 
 router.post('/resend', authController.resendTokenPost);
 

@@ -5,6 +5,16 @@ import { ThunkAction } from "redux-thunk";
 import { API_BASE_URL } from "../../API";
 import { UserState } from "../../types";
 
+
+export const verifyEmail = async (token: string) => {
+  try {
+    const res = await API_BASE_URL.get(`/auth/confirmation/${token}`);
+    return res;
+  } catch (e) {
+    console.log("verifyEmail failed with ", e)
+  }
+};
+
 export const logIn = (
   payload: any
 ): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {

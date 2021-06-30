@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { MDBContainer } from 'mdb-react-ui-kit';
 import { Redirect, Route, Switch } from "react-router-dom";
@@ -9,7 +9,8 @@ import Auth from "./components/Auth";
 import JobsPage from './containers/JobsPage';
 import CandidatesPage from "./containers/CandidatesPage";
 import AddCandidatePage from "./containers/AddCandidatePage";
-import { logIn, signUp, logOut, setUserToken, getUserData } from "./store/actions/user";
+import WelcomePage from "./containers/WelcomePage";
+import { logIn, signUp, logOut, setUserToken, getUserData, verifyEmail } from "./store/actions/user";
 import { fetchCandidates, addOrUpdateCandidate } from "./store/actions/candidates";
 import { fetchJobs } from "./store/actions/jobs";
 import { SignInData, Candidate } from "./types";
@@ -22,6 +23,7 @@ const App = () => {
   const token = localStorage.getItem('token');
   const candidates = useSelector((state: any) => state.candidates.data);
   
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
 	useEffect(() => {
 		if (token) {
@@ -32,10 +34,11 @@ const App = () => {
 		}
 	}, []);
 
-  const onLogin = (userData: SignInData) => {
-    dispatch(logIn(userData));
-    dispatch(fetchJobs());
-    dispatch(fetchCandidates());
+  const onEmailConfirmation = async(token: string) => {
+    const result = await verifyEmail(token);
+    if (result){
+      setIsConfirmed(true);
+    }
   }
 
   return (
@@ -91,6 +94,9 @@ const App = () => {
             ) : (
               <Redirect to="/" />
             )}
+          </Route>
+          <Route path="/confirm/:confirmationCode">
+              <WelcomePage isConfirmed={isConfirmed} verifyEmail={onEmailConfirmation} />
           </Route>
         </Switch>
       </MDBContainer>

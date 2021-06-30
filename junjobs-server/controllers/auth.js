@@ -39,7 +39,11 @@ exports.signUp = async (req, res, next) => {
 				to: newUser.email,
 				subject: 'JJ Account Verification Token',
 				text: 'text',
-				html: '<b>Hello New JJ User</b> \n\n <p>Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + tokenResult.token + '.\n </p>'
+				html: `<h1>Email Confirmation</h1>
+				<h2>Hello ${newUser.firstname}</h2>
+				<p>Thank you for registration. Please confirm your email by clicking on the following link</p>
+				<a href=http://localhost:3000/confirm/${tokenResult.token}> Click here</a>
+				</div>`
 			}
 
 			const transporterResult = await sgMail.send(mailDetails);  
@@ -111,25 +115,23 @@ exports.login = async (req, res, next) => {
 	}
 };
 
-exports.confirmationPost = async (req, res, next) => {
-    req.assert('email', 'Email is not valid').isEmail();
-    req.assert('email', 'Email cannot be blank').notEmpty();
-    req.assert('token', 'Token cannot be blank').notEmpty();
-    req.sanitize('email').normalizeEmail({ remove_dots: false });
- 
-    // Check for validation errors    
-    const errors = req.validationErrors();
-    if (errors) return res.status(400).send(errors);
-	try {
+exports.confirmationGet = async (req, res, next) => {
+	const confirmationCode = req.params.confirmationCode;
+    try {
+		if (!confirmationCode) {
+			const error = new Error('ConfirmationCode is missing!');
+			error.statusCode = 400;
+			throw error;
+		}
 		// Find a matching token
-		const tokenResult = await Token.findOne({ token: req.body.token });
+		const tokenResult = await Token.findOne({ token: confirmationCode });
 		if (!tokenResult){
-			const error = new Error('We were unable to find a valid token. Your token my have expired.');
+			const error = new Error('We were unable to find a valid token. Your token may have expired.');
 			error.statusCode = 400;
 			throw error;
 		}
 		// If we found a token, find a matching user
-		const userResult = await User.findOne({ _id: token._userId, email: req.body.email });
+		const userResult = await User.findOne({ _id: tokenResult._userId._id });
 		if (!userResult){
 			const error = new Error('We were unable to find a user for this token.');
 			error.statusCode = 400;
@@ -146,7 +148,7 @@ exports.confirmationPost = async (req, res, next) => {
 		userResult.isEmailVerified = true;
 		await userResult.save();
 		
-		res.status(200).send("The account has been verified. Please log in.");
+		res.status(201).json({ message: `The account has been verified. Please log in.`});
 	} catch (error) {
 		if (!error.statusCode) {
 			error.statusCode = 500;
