@@ -7,7 +7,8 @@ const initialState: UserState = {
   isLoading: false,
   error: null,
   data: {},
-  loggedIn: false
+  loggedIn: false,
+  isEmailConfirmed: false
 };
 
 //FIXME: move logic with tokens outside
@@ -28,7 +29,8 @@ const user = (state = initialState, action: AnyAction) => {
         isLoading: false,
         error: null,
         loggedIn: true,
-        data: action.payload
+        data: action.payload,
+        isEmailConfirmed: true
       };
     }
     case actionTypes.USER_LOGIN_FAILURE: {
@@ -133,6 +135,11 @@ const user = (state = initialState, action: AnyAction) => {
         ...state,
         data: {...state.data, candidates: action.payload}
       };  
+    case actionTypes.USER_SET_CONFIRMED:
+      return {
+        ...state,
+        isEmailConfirmed: true
+      };
     default:
       return state;
   }

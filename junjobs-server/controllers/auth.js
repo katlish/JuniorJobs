@@ -157,34 +157,55 @@ exports.confirmationGet = async (req, res, next) => {
 	}
 };
 
-exports.resendTokenPost = function (req, res, next) {
-    req.assert('email', 'Email is not valid').isEmail();
-    req.assert('email', 'Email cannot be blank').notEmpty();
-    req.sanitize('email').normalizeEmail({ remove_dots: false });
+exports.resendTokenPost = async (req, res, next) => {
+	const {email} = req.body;
+    try {
+		if (!email) {
+			const error = new Error('Email is missing!');
+			error.statusCode = 400;
+			throw error;
+		}
+
+		const user = await User.findOne({ email });
+		if (!user) {
+			const error = new Error('A user with this email was not found.');
+			error.statusCode = 401;
+			throw error;
+		}
+
+        if (user.isEmailVerified) {
+			const error = new Error('This user has already been verified.');
+			error.statusCode = 400;
+			throw error;
+		}
+
+		// Create a verification token for this user
+		const token = new Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
  
-    // Check for validation errors    
-    const errors = req.validationErrors();
-    if (errors) return res.status(400).send(errors);
- 
-    User.findOne({ email: req.body.email }, function (err, user) {
-        if (!user) return res.status(400).send({ msg: 'We were unable to find a user with that email.' });
-        if (user.isVerified) return res.status(400).send({ msg: 'This account has already been verified. Please log in.' });
- 
-        // Create a verification token, save it, and send email
-        const token = new Token({ _userId: user._id, token: crypto.randomBytes(16).toString('hex') });
- 
-        // Save the token
-        token.save(function (err) {
-            if (err) { return res.status(500).send({ msg: err.message }); }
- 
-            // Send the email
-            const transporter = nodemailer.createTransport({ service: 'Sendgrid', auth: { user: process.env.SENDGRID_USERNAME, pass: process.env.SENDGRID_PASSWORD } });
-            const mailOptions = { from: 'no-reply@codemoto.io', to: user.email, subject: 'Account Verification Token', text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + token.token + '.\n' };
-            transporter.sendMail(mailOptions, function (err) {
-                if (err) { return res.status(500).send({ msg: err.message }); }
-                res.status(200).send('A verification email has been sent to ' + user.email + '.');
-            });
-        });
- 
-    });
+		// Save the verification token
+		const tokenResult = await token.save();
+
+		await sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+		  
+		const mailDetails = {
+			from: 'katia.lishnevsky@gmail.com',
+			to: email,
+			subject: 'JJ Account Verification Token',
+			text: 'text',
+			html: `<h1>Email Confirmation</h1>
+			<h2>Hello ${user.firstname}</h2>
+			<p>Thank you for registration. Please confirm your email by clicking on the following link</p>
+			<a href=http://localhost:3000/confirm/${tokenResult.token}> Click here</a>
+			</div>`
+		}
+
+		await sgMail.send(mailDetails);  
+
+		res.status(201).json({ message: `A verification email has been sent to ${email}.` });
+	} catch (error) {
+		if (!error.statusCode) {
+			error.statusCode = 500;
+		}
+		next(error);
+	}
 };

@@ -10,7 +10,7 @@ import JobsPage from './containers/JobsPage';
 import CandidatesPage from "./containers/CandidatesPage";
 import AddCandidatePage from "./containers/AddCandidatePage";
 import WelcomePage from "./containers/WelcomePage";
-import { logIn, signUp, logOut, setUserToken, getUserData, verifyEmail } from "./store/actions/user";
+import { logIn, signUp, logOut, setUserToken, getUserData, verifyEmail, resendEmail } from "./store/actions/user";
 import { fetchCandidates, addOrUpdateCandidate } from "./store/actions/candidates";
 import { fetchJobs } from "./store/actions/jobs";
 import { SignInData, Candidate } from "./types";
@@ -23,8 +23,6 @@ const App = () => {
   const token = localStorage.getItem('token');
   const candidates = useSelector((state: any) => state.candidates.data);
   
-  const [isConfirmed, setIsConfirmed] = useState(false);
-
 	useEffect(() => {
 		if (token) {
 			dispatch(setUserToken(token));
@@ -33,12 +31,9 @@ const App = () => {
       dispatch(getUserData());
 		}
 	}, []);
-
-  const onEmailConfirmation = async(token: string) => {
-    const result = await verifyEmail(token);
-    if (result){
-      setIsConfirmed(true);
-    }
+  
+  const onResend = (email: string) => {
+    dispatch(resendEmail(email));
   }
 
   return (
@@ -96,7 +91,10 @@ const App = () => {
             )}
           </Route>
           <Route path="/confirm/:confirmationCode">
-              <WelcomePage isConfirmed={isConfirmed} verifyEmail={onEmailConfirmation} />
+              <WelcomePage 
+                verifyEmail={(token: string) => dispatch(verifyEmail(token))} 
+                resendEmail={onResend}
+              />
           </Route>
         </Switch>
       </MDBContainer>

@@ -4,14 +4,31 @@ import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { API_BASE_URL } from "../../API";
 import { UserState } from "../../types";
+import { setError} from "../actions/common";
 
 
-export const verifyEmail = async (token: string) => {
+export const verifyEmail  = (token: string): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
   try {
-    const res = await API_BASE_URL.get(`/auth/confirmation/${token}`);
-    return res;
+    await API_BASE_URL.get(`/auth/confirmation/${token}`);
+    dispatch({ type: actions.USER_SET_CONFIRMED });
   } catch (e) {
-    console.log("verifyEmail failed with ", e)
+    if (e?.response.data.message === "This user has already been verified."){
+      dispatch({ type: actions.USER_SET_CONFIRMED });
+    }
+    dispatch(setError(e));
+  }
+};
+
+//TODO: add success message to the common state instead of setError with the msg
+export const resendEmail  = (email: string): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+  try {
+    const { data } = await API_BASE_URL.post(`/auth/resend`, {email});
+    dispatch(setError(data.message));
+  } catch (e) {
+    if (e?.response?.data?.message === "This user has already been verified."){
+      dispatch({ type: actions.USER_SET_CONFIRMED });
+    }
+    dispatch(setError(e));
   }
 };
 

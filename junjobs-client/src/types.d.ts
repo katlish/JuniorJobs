@@ -109,6 +109,7 @@ export interface UserState {
   error: any;
   data: any;
   loggedIn: boolean;
+  isEmailConfirmed: boolean;
 }
 
 export interface JobsState {

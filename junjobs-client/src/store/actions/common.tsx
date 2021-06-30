@@ -26,6 +26,13 @@ export const setCountry = (country: Country | null) => ({
     country
 });
 
+//TODO: define a type for error
+export const setError = (error: any) => {
+	return {
+		type: actions.COMMON_SET_ERROR,
+		payload: error?.response?.data?.message || error
+}};
+
 export const resetError = () => ({
 	type: actions.COMMON_RESET_ERROR
 });
