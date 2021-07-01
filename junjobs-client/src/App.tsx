@@ -25,7 +25,7 @@ const App = () => {
 	useEffect(() => {
       dispatch(fetchJobs());
       dispatch(fetchCandidates());
-	}, []);
+	}, [dispatch]);
   
   return (
     <div style={{background: "#191918"}}>

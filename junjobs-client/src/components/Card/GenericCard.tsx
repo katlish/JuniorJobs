@@ -22,6 +22,11 @@ const GenericCard = ({ item, withAdd, isChecked, addToFavourites, removeFromFavo
 
   const fromatDate = (date: string): string => new Date(date).toDateString().toString();
 
+  const onMoreInfoClick = (e: any) => {
+    e.preventDefault();
+    setShowModal(item);
+  }
+
   return (
     <>
     <div key={item.externalId} className="card bg-dark shadow-3-strong" style={{width: "22rem"}}>
@@ -72,7 +77,7 @@ const GenericCard = ({ item, withAdd, isChecked, addToFavourites, removeFromFavo
             </div>
         </div>
         <div className="card-footer text-muted text-center mb-4">
-          <a href="#" className="btn btn-secondary" onClick={() => setShowModal(item)}>More info</a>
+          <div className="btn btn-secondary" onClick={onMoreInfoClick}>More info</div>
         </div>
       </div>
 
@@ -98,7 +103,7 @@ const GenericCard = ({ item, withAdd, isChecked, addToFavourites, removeFromFavo
         </Card.Body>
 
         <Modal.Footer>
-          <a className="btn btn-secondary btn-lg" href={item?.url} target="_blank">
+          <a className="btn btn-secondary btn-lg" href={item?.url} target="_blank" rel="noreferrer">
             CONTACT INFO
           </a>
         </Modal.Footer>

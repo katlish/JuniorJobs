@@ -4,7 +4,7 @@ import { Spinner } from "react-bootstrap";
 import { IGenericPageWithCardsProps, Country } from "../types";
 import CardsList from "../components/CardsList/CardsList";
 import Pagination from "../components/Pagination/Pagination";
-import { PAGINATION_ITEMS_PER_PAGE, PAGINATION_PAGES_PER_BLOCK, userRole } from "../store/constants/constants";
+import { PAGINATION_ITEMS_PER_PAGE, PAGINATION_PAGES_PER_BLOCK } from "../store/constants/constants";
 import FiltersBar from "../components/FiltersBar/FiltersBar";
 
 const GenericPageWithCards = ({

@@ -14,7 +14,7 @@ const WelcomePage = ({verifyEmail, resendEmail}: IWelcomePage) => {
 
     useEffect(() => {
         verifyEmail(confirmationCode);
-    }, [isEmailConfirmed]);
+    }, [isEmailConfirmed, verifyEmail, confirmationCode]);
 
     const onSend = (e: any) => {
         e.preventDefault();

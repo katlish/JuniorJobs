@@ -10,8 +10,6 @@ import {
   MDBNavbarBrand,
   MDBBtn } from 'mdb-react-ui-kit';
 import { INavBarProps } from "../../types";
-import { userRole } from "../../store/constants/constants";
-
 
 const NavBarMDB = ({ user, loggedIn, logout }: INavBarProps) => {
   const [showBasic, setShowBasic] = useState(false);

@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userRole } from "src/store/constants/constants";
 import { fetchCandidates } from "../store/actions/candidates";
@@ -18,7 +18,7 @@ const formatCandidateItemsToItemCard = (candidates: Candidate[]): ItemCard[] => 
             tags.push("remote");
         }
         if(candidate.jobs.length){
-            candidate.jobs.map((tag: String) => {
+            candidate.jobs.forEach((tag: String) => {
                 tags.push(tag);
             })
         }
@@ -41,7 +41,7 @@ const CandidatesPage = () => {
 
     useEffect(() => {
         dispatch(fetchCandidates());
-    }, []);
+    }, [dispatch]);
 
     const visibleItems = useSelector(filterCandidates);
     const formattedVisibleItems = formatCandidateItemsToItemCard(visibleItems);

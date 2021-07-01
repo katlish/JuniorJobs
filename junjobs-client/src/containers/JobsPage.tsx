@@ -16,7 +16,7 @@ const formatJobItemsToItemCard = (jobItems: Job[]): ItemCard[] => {
             tags.push("remote");
         }
         if(job.jobs.length){
-            job.jobs.map((tag: String) => {
+            job.jobs.forEach((tag: String) => {
                 tags.push(tag);
             })
         }
@@ -39,7 +39,7 @@ const JobsPage = () => {
 
     useEffect(() => {
       dispatch(fetchJobs());
-    }, []);
+    }, [dispatch]);
 
     const visibleItems = useSelector(filterJobs);
     const formattedVisibleItems = formatJobItemsToItemCard(visibleItems);
