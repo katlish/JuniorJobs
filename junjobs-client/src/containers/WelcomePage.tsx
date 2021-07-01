@@ -3,8 +3,10 @@ import React, {useEffect, useState} from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ErrorsPanel from "../components/ErrorsPanel/ErrorsPanel";
+import { IWelcomePage } from "../types";
 
-const WelcomePage = ({verifyEmail, resendEmail}: any) => {
+
+const WelcomePage = ({verifyEmail, resendEmail}: IWelcomePage) => {
     let { confirmationCode } = useParams<{ confirmationCode: string }>();
     const isEmailConfirmed = useSelector((state: any) => state.user.isEmailConfirmed);
 

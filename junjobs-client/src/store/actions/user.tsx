@@ -1,36 +1,10 @@
 import * as actions from "../constants/constants";
-import jwt_decode, { JwtPayload } from "jwt-decode";
+// import jwt_decode, { JwtPayload } from "jwt-decode";
 import { AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
 import { API_BASE_URL } from "../../API";
 import { UserState } from "../../types";
 import { setError} from "../actions/common";
-
-
-export const verifyEmail  = (token: string): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
-  try {
-    await API_BASE_URL.get(`/auth/confirmation/${token}`);
-    dispatch({ type: actions.USER_SET_CONFIRMED });
-  } catch (e) {
-    if (e?.response.data.message === "This user has already been verified."){
-      dispatch({ type: actions.USER_SET_CONFIRMED });
-    }
-    dispatch(setError(e));
-  }
-};
-
-//TODO: add success message to the common state instead of setError with the msg
-export const resendEmail  = (email: string): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
-  try {
-    const { data } = await API_BASE_URL.post(`/auth/resend`, {email});
-    dispatch(setError(data.message));
-  } catch (e) {
-    if (e?.response?.data?.message === "This user has already been verified."){
-      dispatch({ type: actions.USER_SET_CONFIRMED });
-    }
-    dispatch(setError(e));
-  }
-};
 
 export const logIn = (
   payload: any
@@ -38,6 +12,7 @@ export const logIn = (
   try {
     dispatch({ type: actions.USER_LOGIN_BEGIN });
     const { data } = await API_BASE_URL.post("/auth/login", payload);
+    localStorage.setItem("token", data);
     dispatch({ type: actions.USER_LOGIN_SUCCESS, payload: data });
   } catch (e) {
     dispatch({
@@ -64,17 +39,12 @@ export const signUp = (
   }
 };
 
-export const logOut = () => ({
-  type: actions.USER_LOGOUT
-});
-
-export const setUserToken = (token: string) => ({
-  type: actions.USER_SET_TOKEN,
-  payload: {
-    token,
-    data: { ...jwt_decode<JwtPayload>(token) }
-  }
-});
+export const logOut = () => {
+  localStorage.removeItem("token");
+  return{
+    type: actions.USER_LOGOUT
+  };
+}
 
 export const getUserData = (): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
   try {
@@ -166,3 +136,35 @@ const updateUserData = (selectedItems: any): ThunkAction<void, UserState, unknow
   }
 };
 
+export const verifyEmail  = (token: string): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+  try {
+    await API_BASE_URL.get(`/auth/confirmation/${token}`);
+    dispatch({ type: actions.USER_SET_CONFIRMED });
+  } catch (e) {
+    if (e?.response.data.message === "This user has already been verified."){
+      dispatch({ type: actions.USER_SET_CONFIRMED });
+    }
+    dispatch(setError(e));
+  }
+};
+
+//TODO: add success message to the common state instead of setError with the msg
+export const resendEmail  = (email: string): ThunkAction<void, UserState, unknown, AnyAction> => async dispatch => {
+  try {
+    const { data } = await API_BASE_URL.post(`/auth/resend`, {email});
+    dispatch(setError(data.message));
+  } catch (e) {
+    if (e?.response?.data?.message === "This user has already been verified."){
+      dispatch({ type: actions.USER_SET_CONFIRMED });
+    }
+    dispatch(setError(e));
+  }
+};
+
+// export const setUserToken = (token: string) => ({
+//   type: actions.USER_SET_TOKEN,
+//   payload: {
+//     token,
+//     data: { ...jwt_decode<JwtPayload>(token) }
+//   }
+// });

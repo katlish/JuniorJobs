@@ -131,7 +131,7 @@ const GenericPageWithCards = ({
       }
 
 
-      <h3 className="text-left mb-4">{error && `Error: ${error}`}</h3>
+      <h3 className="text-center mb-4">{error && `Error: ${error}`}</h3>
     </div>
   );
 };

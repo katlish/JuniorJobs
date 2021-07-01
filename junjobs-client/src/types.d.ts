@@ -181,6 +181,7 @@ export interface IAuthProps {
   logIn: logIn;
   signUp: signUp;
   type: string;
+  resendEmail: Function;
 }
 
 export interface IAuthFormProps {
@@ -198,4 +199,9 @@ export interface ItemCard {
   description: string;
   url: string;
   tags: String[];
+}
+
+export interface IWelcomePage{
+  verifyEmail: Function;
+  resendEmail: Function;
 }

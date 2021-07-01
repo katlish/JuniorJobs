@@ -22,7 +22,7 @@ export const validationSchema = Yup.object({
   role: Yup.string()
 });
 
-const Auth = ({ show = false, logIn, signUp, type = 'login' }: IAuthProps) => {
+const Auth = ({ show = false, logIn, signUp, type = 'login', resendEmail }: IAuthProps) => {
 	const [authType, setType] = useState(type);
 
   const history = useHistory();
@@ -67,6 +67,15 @@ const Auth = ({ show = false, logIn, signUp, type = 'login' }: IAuthProps) => {
 		formik.resetForm();
 	};
 
+  const onSend = (e: any) => {
+    e.preventDefault();
+    resendEmail(formik.values.email);
+    formik.setStatus({
+      type: 'success',
+      text: `Success! Please check your mailbox - ${formik.values.email}.`,
+    });
+  }
+
   return (
     <Modal show={show} onHide={() => history.push("/")} centered>
       <Modal.Header closeButton>
@@ -76,9 +85,20 @@ const Auth = ({ show = false, logIn, signUp, type = 'login' }: IAuthProps) => {
         <AuthForm formik={formik} type={authType}/>
         
         {formik.status && (
-          <div className={`text-${formik.status.type}`}>
-            {formik.status.text}
-          </div>
+          <>
+            <div className={`text-${formik.status.type}`}>
+              {formik.status.text}
+            </div>
+            {(formik.status.text === "Your account has not been verified.") && (
+              <>
+              <h6 className="text-center mt-2">Please check your mailbox or resend the verification email again:</h6>
+              <form className="d-flex justify-content-center my-3">
+                <input value={formik.values.email} type="email" className="form-control w-auto" id="resendInputEmail1"/>
+                <button type="submit" className="btn btn-success btn-sm" onClick={onSend}>Resend</button>
+              </form>
+              </>
+            )}
+          </>
         )}
       </Modal.Body>
       <Modal.Footer className="d-flex justify-content-between">

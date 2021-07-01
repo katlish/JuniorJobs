@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from "react-redux";
 import { MDBContainer } from 'mdb-react-ui-kit';
 import { Redirect, Route, Switch } from "react-router-dom";
@@ -10,7 +10,7 @@ import JobsPage from './containers/JobsPage';
 import CandidatesPage from "./containers/CandidatesPage";
 import AddCandidatePage from "./containers/AddCandidatePage";
 import WelcomePage from "./containers/WelcomePage";
-import { logIn, signUp, logOut, setUserToken, getUserData, verifyEmail, resendEmail } from "./store/actions/user";
+import { logIn, signUp, logOut, verifyEmail, resendEmail } from "./store/actions/user";
 import { fetchCandidates, addOrUpdateCandidate } from "./store/actions/candidates";
 import { fetchJobs } from "./store/actions/jobs";
 import { SignInData, Candidate } from "./types";
@@ -20,22 +20,13 @@ const App = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user.data);
   const loggedIn = useSelector((state: any) => state.user.loggedIn);
-  const token = localStorage.getItem('token');
   const candidates = useSelector((state: any) => state.candidates.data);
   
 	useEffect(() => {
-		if (token) {
-			dispatch(setUserToken(token));
       dispatch(fetchJobs());
       dispatch(fetchCandidates());
-      dispatch(getUserData());
-		}
 	}, []);
   
-  const onResend = (email: string) => {
-    dispatch(resendEmail(email));
-  }
-
   return (
     <div style={{background: "#191918"}}>
       <NavBarMDB 
@@ -61,6 +52,7 @@ const App = () => {
                 logIn={(userData: SignInData) => dispatch(logIn(userData))}
                 signUp={(userData: SignInData) => dispatch(signUp(userData))}
                 type='signup'
+                resendEmail={(email: string) => dispatch(resendEmail(email))}
               />
             ) : (
               <Redirect to="/" />
@@ -74,6 +66,7 @@ const App = () => {
                 logIn={(userData: SignInData) => dispatch(logIn(userData))}
                 signUp={(userData: SignInData) => dispatch(signUp(userData))}
                 type='login'
+                resendEmail={(email: string) => dispatch(resendEmail(email))}
               />
             ) : (
               <Redirect to="/" />
@@ -93,7 +86,7 @@ const App = () => {
           <Route path="/confirm/:confirmationCode">
               <WelcomePage 
                 verifyEmail={(token: string) => dispatch(verifyEmail(token))} 
-                resendEmail={onResend}
+                resendEmail={(email: string) => dispatch(resendEmail(email))}
               />
           </Route>
         </Switch>
