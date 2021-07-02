@@ -82,6 +82,8 @@ const GenericPageWithCards = ({
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItemsOnPage = visibleItems?.slice(indexOfFirstItem, indexOfLastItem);
 
+  const totPages = Math.ceil((visibleItems?.length)/itemsPerPage);
+
   const paginate = (curPage: number) => setCurrentPage(curPage);
 
   return (
@@ -102,12 +104,17 @@ const GenericPageWithCards = ({
         isFilterHidden={isFilterHidden}
       />
 
-      <div className="my-5">
-        <p className="text-center">
+      <div className="my-5 text-center">
+        <p>
           {visibleItems?.length}
           {isFavourite ? ` ${resultsTextForFavourites}` : ` ${resultsText}`} 
           {isLoading && <Spinner as="span" variant="primary" animation="border" />}
         </p>
+        {totPages ? (
+          <p>
+            Page {currentPage} from {totPages}
+          </p>
+        ): null}
       </div>
 
       <CardsList 

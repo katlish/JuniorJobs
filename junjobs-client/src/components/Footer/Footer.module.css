@@ -1,0 +1,8 @@
+.socialLinks {
+    color: grey;
+    text-decoration: none;
+    padding-inline: 0.5rem;
+}
+.socialLinks:hover {
+    color: #b23cfd;
+}

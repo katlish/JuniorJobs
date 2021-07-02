@@ -3,7 +3,7 @@ import { whichBlockPages } from "./utils/utilsPagination";
 import { IPaginationProps } from "../../types";
 import "./Pagination.css";
 
-const Paginaion = ({totalItems,
+const PaginationWrapper = ({totalItems,
         itemsPerPage,
         paginate,
         currentPage,
@@ -16,21 +16,28 @@ const Paginaion = ({totalItems,
     
     for (let i=currentBlock.firstPage; i<= currentBlock.lastPage; i++){
         pages.push(
-            <Pagination.Item key={i} onClick={() => paginate(i)} active={i === currentPage}>
+            <Pagination.Item key={i} onClick={(e) => onPaginate(e, i)} active={i === currentPage}>
                 {i}
             </Pagination.Item>,
         );
     }
 
     console.log({currentPage});
+
+    const onPaginate = (e: any, page: number) => {
+        e.preventDefault();
+        paginate(page);
+        window.scrollTo(0, 0);
+    }
+
     return (
             <Pagination className="d-flex flex-row justify-content-center">
-                {currentPage>pagesPerBlock && <Pagination.First onClick={() => paginate(1)}/>} 
-                {currentPage>pagesPerBlock && <Pagination.Prev onClick={() => paginate(currentBlock.firstPage-1)}/>}
+                {currentPage>pagesPerBlock && <Pagination.First onClick={(e) => onPaginate(e, 1)}/>} 
+                {currentPage>pagesPerBlock && <Pagination.Prev onClick={(e) => onPaginate(e, currentBlock.firstPage-1)}/>}
                 {pages}
-                {currentBlock.lastPage<totPages && <Pagination.Next onClick={() => paginate(currentBlock.lastPage+1)}/>}
-                {currentBlock.lastPage<totPages && <Pagination.Last onClick={() => paginate(totPages)}/>}
+                {currentBlock.lastPage<totPages && <Pagination.Next onClick={(e) => onPaginate(e, currentBlock.lastPage+1)}/>}
+                {currentBlock.lastPage<totPages && <Pagination.Last onClick={(e) => onPaginate(e, totPages)}/>}
             </Pagination>
     );
 }
-export default Paginaion;
+export default PaginationWrapper;
